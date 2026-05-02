@@ -34,7 +34,17 @@
         .wave { width: 3px; background: var(--btn-orange); border-radius: 3px; animation: wave-anim 0.5s infinite ease-in-out; }
         @keyframes wave-anim { 0%, 100% { height: 5px; } 50% { height: 15px; } }
 
-        /* Hiệu ứng rung lắc khi chọn sai */
+        /* Biểu tượng loa */
+        #mute-btn {
+            cursor: pointer;
+            font-size: 1.4rem;
+            margin-left: 10px;
+            vertical-align: middle;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        #mute-btn:hover { transform: scale(1.1); }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-8px); }
@@ -100,9 +110,7 @@
         .option-item:hover:not(.disabled) { border-color: var(--btn-blue); background: #f0f7ff; }
         
         .option-item.selected { 
-            background: #fff; 
-            border-color: #00e5ff; 
-            color: #003399;
+            background: #fff; border-color: #00e5ff; color: #003399;
             box-shadow: 0 0 15px rgba(0, 229, 255, 0.6), inset 0 0 10px rgba(0, 229, 255, 0.2);
             transform: scale(1.01);
         }
@@ -218,23 +226,56 @@
     
     let allQuestions = [], selectedQuestions = [], studentAnswers = [];
     let currentQuestionIndex = 0, timeLeft = 1200, timerInterval, isSubmitted = false, cheatCount = 0;
-
+    
+    // Biến quản lý trạng thái âm thanh
+    let isMuted = false;
     const synth = window.speechSynthesis;
+
+    function toggleMute() {
+        isMuted = !isMuted;
+        const muteBtn = document.getElementById('mute-btn');
+        if (isMuted) {
+            muteBtn.innerText = "🔇";
+            synth.cancel(); // Dừng đọc ngay lập tức
+            document.getElementById('ai-waves').style.display = 'none';
+            document.getElementById('ai-status').innerText = 'Đã tắt tiếng trợ lý.';
+        } else {
+            muteBtn.innerText = "🔊";
+            document.getElementById('ai-status').innerText = 'Đã bật tiếng trợ lý.';
+            // Đọc lại câu hiện tại nếu người dùng bật loa lên
+            speakCurrentQuestion();
+        }
+    }
+
     function aiSpeak(text) {
+        if (isMuted) return; // Nếu đang tắt tiếng thì không gọi lệnh đọc
+        
         synth.cancel();
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = 'vi-VN';
-        utter.rate = 1.1; // Tốc độ vừa phải để học viên nghe rõ
+        utter.rate = 1.05;
         
         utter.onstart = () => {
-            document.getElementById('ai-waves').style.display = 'flex';
-            document.getElementById('ai-status').innerText = 'Đang thuyết minh...';
+            if (!isMuted) {
+                document.getElementById('ai-waves').style.display = 'flex';
+                document.getElementById('ai-status').innerText = 'Đang thuyết minh...';
+            }
         };
         utter.onend = () => {
             document.getElementById('ai-waves').style.display = 'none';
             document.getElementById('ai-status').innerText = 'Sẵn sàng.';
         };
         synth.speak(utter);
+    }
+
+    function speakCurrentQuestion() {
+        const q = selectedQuestions[currentQuestionIndex];
+        const labels = ['A', 'B', 'C', 'D'];
+        let textToRead = "Câu hỏi " + (currentQuestionIndex + 1) + ": " + q.question + ". ";
+        q.options.forEach((opt, i) => {
+            textToRead += "Đáp án " + labels[i] + ": " + opt + ". ";
+        });
+        aiSpeak(textToRead);
     }
 
     window.onload = preloadQuestions;
@@ -251,7 +292,6 @@
                     explanation: i.Giaithich || "Thực hiện đúng quy trình an toàn.",
                     image: i["HINH ANH"] || "" 
                 }));
-                console.log("Đã tải " + allQuestions.length + " câu hỏi.");
             }
         });
     }
@@ -275,13 +315,12 @@
             if(result.isValid) startQuiz();
             else { alert(result.message || "Mã thi không đúng!"); btn.disabled = false; btn.innerText = "VÀO THI NGAY ➔"; }
         } catch(e) { 
-            alert("Lỗi kết nối Server! Vui lòng kiểm tra lại mã thi."); 
-            btn.disabled = false; btn.innerText = "VÀO THI NGAY ➔"; 
+            alert("Lỗi kết nối Server!"); btn.disabled = false; btn.innerText = "VÀO THI NGAY ➔"; 
         }
     }
 
     function startQuiz() {
-        if(allQuestions.length === 0) return alert("Vui lòng đợi dữ liệu tải...");
+        if(allQuestions.length === 0) return alert("Dữ liệu chưa tải xong!");
         selectedQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 30);
         document.getElementById('display-name').innerText = document.getElementById('studentName').value.toUpperCase();
         document.getElementById('job-display-header').innerText = document.getElementById('jobType').options[document.getElementById('jobType').selectedIndex].text;
@@ -292,13 +331,12 @@
         document.getElementById('timer').style.display = 'block';
         document.getElementById('quiz-screen').style.display = 'grid';
         
-        setTimeout(() => {
-            document.getElementById('caee-header').classList.add('header-hidden');
-        }, 10000);
+        setTimeout(() => { document.getElementById('caee-header').classList.add('header-hidden'); }, 10000);
 
         showQuestion(0);
         startTimer();
-        aiSpeak("Chào mừng học viên " + document.getElementById('studentName').value + ". Chúc bạn hoàn thành tốt bài trắc nghiệm.");
+        // Lời chào ban đầu
+        aiSpeak("Chào mừng học viên " + document.getElementById('studentName').value + ". Mời bạn bắt đầu bài thi.");
     }
 
     function showQuestion(idx) {
@@ -308,7 +346,9 @@
         const isPractice = document.getElementById('modeToggle').checked;
         const labels = ['A', 'B', 'C', 'D'];
 
-        let html = `<h3>Câu ${idx + 1}: ${q.question}</h3>`;
+        // Thêm nút Loa vào tiêu đề câu hỏi
+        let html = `<h3>Câu ${idx + 1} <span id="mute-btn" onclick="toggleMute()">${isMuted ? '🔇' : '🔊'}</span>: ${q.question}</h3>`;
+        
         if(q.image) html += `<div class="q-image-box"><img src="${q.image}"></div>`;
 
         q.options.forEach((opt, i) => {
@@ -331,13 +371,9 @@
         document.getElementById('quiz-content').innerHTML = html;
         renderGrid();
 
-        // CẢI TIẾN: AI đọc cả câu hỏi và đáp án nếu chưa làm
+        // Tự động đọc câu hỏi khi chuyển câu
         if (!stored) {
-            let textToRead = "Câu hỏi " + (idx+1) + ": " + q.question + ". ";
-            q.options.forEach((opt, i) => {
-                textToRead += "Đáp án " + labels[i] + ": " + opt + ". ";
-            });
-            aiSpeak(textToRead);
+            speakCurrentQuestion();
         }
     }
 
@@ -349,8 +385,7 @@
         
         const q = selectedQuestions[qIdx];
         const labels = ['A', 'B', 'C', 'D'];
-        const userChoiceIdx = q.options.indexOf(ans);
-        const userChoiceLabel = labels[userChoiceIdx];
+        const userChoiceLabel = labels[q.options.indexOf(ans)];
 
         if (document.getElementById('modeToggle').checked) {
             if (userChoiceLabel === q.answer) {
@@ -358,11 +393,9 @@
                 showQuestion(qIdx);
             } else {
                 const items = document.querySelectorAll('.option-item');
-                items.forEach(item => {
-                    if(item.innerText.includes(ans)) item.classList.add('shake-anim');
-                });
+                items.forEach(item => { if(item.innerText.includes(ans)) item.classList.add('shake-anim'); });
                 aiSpeak("Chưa đúng. Đáp án đúng là " + q.answer + ". " + q.explanation);
-                setTimeout(() => { showQuestion(qIdx); }, 1500);
+                setTimeout(() => { showQuestion(qIdx); }, 2000);
             }
         } else {
             showQuestion(qIdx);
@@ -395,10 +428,6 @@
         synth.cancel();
         isSubmitted = true;
         
-        const nameValue = document.getElementById('studentName').value.toUpperCase().trim();
-        const dobValue = document.getElementById('studentDOB').value.trim();
-        const khoaThiValue = document.getElementById('khoaThi').value.trim();
-
         let score = 0;
         selectedQuestions.forEach((q, i) => {
             const ans = studentAnswers.find(a => a.qIndex === i);
@@ -409,9 +438,9 @@
         const score10 = ((score / 30) * 10).toFixed(1); 
         const status = score >= 25 ? "ĐẠT" : "KHÔNG ĐẠT";
 
-        document.getElementById('res-name').innerText = nameValue;
-        document.getElementById('res-dob').innerText = dobValue;
-        document.getElementById('res-id').innerText = khoaThiValue;
+        document.getElementById('res-name').innerText = document.getElementById('studentName').value.toUpperCase();
+        document.getElementById('res-dob').innerText = document.getElementById('studentDOB').value;
+        document.getElementById('res-id').innerText = document.getElementById('khoaThi').value;
         document.getElementById('res-score').innerText = score;
 
         const badge = document.getElementById('res-badge');
@@ -419,21 +448,14 @@
         badge.style.backgroundColor = status === "ĐẠT" ? "#28a745" : "#dc3545";
         document.getElementById('result-screen').style.display = 'flex';
 
-        // AI thông báo kết quả
         aiSpeak("Kết quả của bạn là " + score10 + " điểm. Trạng thái " + status);
 
         const formData = new URLSearchParams();
         formData.append('maThi', document.getElementById('maThi').value.trim().toUpperCase());
-        formData.append('name', nameValue);
-        formData.append('birthDate', dobValue);
-        formData.append('khoaThi', khoaThiValue);
-       const rawNghe = document.getElementById('jobType').options[document.getElementById('jobType').selectedIndex].text;
-const modeSuffix = document.getElementById('modeToggle').checked ? " (ÔN TẬP)" : " (THI)";
-formData.append('ngheName', "NGHỀ: " + rawNghe + modeSuffix);
+        formData.append('name', document.getElementById('studentName').value.toUpperCase());
         formData.append('score', score + "/30 (" + score10 + " điểm)");
         formData.append('status', status);
         formData.append('viPham', cheatCount);
-formData.append('mode', document.getElementById('modeToggle').checked ? "ON_TAP" : "THI");
         fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: formData });
 
         let c = 15;
@@ -447,13 +469,10 @@ formData.append('mode', document.getElementById('modeToggle').checked ? "ON_TAP"
         if(!isSubmitted && selectedQuestions.length > 0) { 
             cheatCount++; 
             document.getElementById('warning-overlay').style.display = 'flex'; 
-            document.getElementById('cheat-count-msg').innerText = `Lần vi phạm: ${cheatCount} / 3`; 
             if (cheatCount >= 3) submitQuiz(true); 
         } 
     };
-    window.onfocus = () => { 
-        if (cheatCount < 3) setTimeout(() => { document.getElementById('warning-overlay').style.display = 'none'; }, 500); 
-    };
+    window.onfocus = () => { setTimeout(() => { document.getElementById('warning-overlay').style.display = 'none'; }, 500); };
 </script>
 </body>
 </html>
