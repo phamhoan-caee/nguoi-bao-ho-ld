@@ -116,7 +116,7 @@
                 <div style="font-size: 16px; color: var(--caee-blue); font-weight: bold;">TRƯỜNG CĐ CƠ ĐIỆN NÔNG NGHIỆP VÀ MÔI TRƯỜNG</div>
                 <div style="font-size: 18px; color: #d32f2f; font-weight: 900; margin-top: 5px; text-transform: uppercase;">KHOA MÁY THI CÔNG</div>
             </div>
-            <label style="font-weight: bold; font-size: 0.9rem;">CHỌN NGHỀ ĐÀO TẠO:</label>
+            <label style="font-weight: bold; font-size: 0.9rem;">NGHỀ ĐÀO TẠO:</label>
             <select id="jobType" class="form-control" style="background: #fff8e1; border: 2px solid orange;" onchange="preloadQuestions()">
                 <option value="1538604642">VẬN HÀNH XE NÂNG HÀNG</option>
                 <option value="798209567">VẬN HÀNH CẦN TRỤC</option>
@@ -171,18 +171,18 @@
 
     <div id="result-screen">
         <div class="result-card">
-            <h2 style="color: var(--caee-blue); margin-bottom: 20px; font-size: 1.8rem;">KẾT QUẢ CỦA BẠN</h2>
+            <h2 style="color: var(--caee-blue); margin-bottom: 20px; font-size: 1.8rem;">KẾT QUẢ THI</h2>
             <div style="margin-bottom: 20px; line-height: 1.8; font-size: 1.1rem; text-align: left; padding: 0 20px;">
-                • Học viên: <b id="res-name" style="text-transform: uppercase; color: #d32f2f;">---</b><br>
-                • Ngày sinh: <b id="res-dob">---</b><br>
-                • Khóa thi: <b id="res-id">---</b>
+                Học viên: <b id="res-name" style="text-transform: uppercase; color: #d32f2f;">---</b><br>
+                Ngày sinh: <b id="res-dob">---</b><br>
+                Khóa thi: <b id="res-id">---</b>
             </div>
             <div class="score-circle">
                 <span id="res-score">0</span>
                 <small style="font-size: 0.9rem; font-weight: bold; color: #666;">/ 30 CÂU</small>
             </div>
             <div id="res-badge" class="status-badge">---</div>
-            <div style="background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 12px; font-weight: 800;">DỮ LIỆU ĐÃ ĐƯỢC LƯU TRỰC TUYẾN</div>
+            <div style="background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 12px; font-weight: 800;">KẾT QUẢ THI DÙNG ĐỂ XÉT CẤP CHỨNG CHỈ.</div>
             <p style="margin-top: 20px; color: #666; font-style: italic;">Hệ thống tự động làm mới sau <span id="countdown">15</span> giây...</p>
         </div>
     </div>
