@@ -25,9 +25,10 @@
             transition: background-image 0.5s ease-in-out;
         }
 
-      .bg-xe-nang { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-xe-nang.jpg'); }
-      .bg-can-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-can-truc.jpg'); }
-      .bg-cau-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-cau-truc.jpg'); }
+        .bg-xe-nang { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-6.5/main/bg-xe-nang.jpg'); }
+        .bg-can-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-6.5/main/bg-can-truc.jpg'); }
+        .bg-cau-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-6.5/main/bg-cau-truc.jpg'); }
+
         .welcome-container, #quiz-content, .sidebar-right > div, #ai-container {
             background: #ffffff !important; 
             border-radius: 15px; 
@@ -115,23 +116,23 @@
                 <div style="font-size: 16px; color: var(--caee-blue); font-weight: bold;">TRƯỜNG CĐ CƠ ĐIỆN NÔNG NGHIỆP VÀ MÔI TRƯỜNG</div>
                 <div style="font-size: 18px; color: #d32f2f; font-weight: 900; margin-top: 5px; text-transform: uppercase;">KHOA MÁY THI CÔNG</div>
             </div>
-            <label style="font-weight: bold; font-size: 0.9rem;">NGHỀ ĐÀO TẠO:</label>
+            <label style="font-weight: bold; font-size: 0.9rem;">CHỌN NGHỀ ĐÀO TẠO:</label>
             <select id="jobType" class="form-control" style="background: #fff8e1; border: 2px solid orange;" onchange="preloadQuestions()">
                 <option value="1538604642">VẬN HÀNH XE NÂNG HÀNG</option>
                 <option value="798209567">VẬN HÀNH CẦN TRỤC</option>
                 <option value="1969781180">VẬN HÀNH CẦU TRỤC</option>
             </select>
             <input type="text" id="studentName" placeholder="HỌ VÀ TÊN HỌC VIÊN" class="form-control" style="text-transform: uppercase;">
-            <input type="text" id="studentDOB" placeholder="Ngày/tháng/năm sinh (VD: 01/01/2009)" class="form-control">
+            <input type="text" id="studentDOB" placeholder="Ngày/tháng/năm sinh (VD: 01/01/2000)" class="form-control">
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <input type="text" id="khoa Thi" value="Tháng 8/2026" class="form-control" style="flex: 1.5; background: #eee; font-weight: bold;" readonly>
+                <input type="text" id="khoaThi" value="Tháng 8/2026" class="form-control" style="flex: 1.5; background: #eee; font-weight: bold;" readonly>
                 <input type="password" id="maThi" placeholder="Mã thi" class="form-control" style="flex: 1;">
             </div>
             <div style="display:flex; align-items:center; margin: 15px 0; justify-content: center; gap:10px; background: #e3f2fd; padding: 10px; border-radius: 10px;">
                 <input type="checkbox" id="modeToggle" style="width:20px; height:20px; cursor: pointer;">
-                <label for="modeToggle" style="cursor:pointer; font-weight: 700; color: #0d47a1;">Chế độ ôn tập (Có AI giải thích)</label>
+                <label for="modeToggle" style="cursor:pointer; font-weight: 700; color: #0d47a1;">Chế độ ÔN TẬP (Có AI giải thích)</label>
             </div>
-            <button class="btn-start" id="btnStart" onclick="validateAndStart()">BẮT ĐẦU THI ➔</button>
+            <button class="btn-start" id="btnStart" onclick="validateAndStart()">VÀO THI NGAY ➔</button>
         </div>
     </div>
 
@@ -145,9 +146,9 @@
             </div>
         </div>
         <div style="flex-grow: 1;">
-            <div style="color: var(--caee-blue); font-weight: 800; font-size: 16px;">HỆ THỐNG TRỢ LÝ CAEE</div>
+            <div style="color: var(--caee-blue); font-weight: 800; font-size: 16px;">HỆ THỐNG TRỢ LÝ ẢO CAEE</div>
             <div style="color: #333; font-size: 14px; font-weight: 600;">Học viên: <span id="display-name" style="color: #d32f2f;">---</span></div>
-            <div id="ai-status" style="font-size: 13px; color: #007bff; font-weight: bold;">Chào mừng bạn đến với hệ thống thi CAEE</div>
+            <div id="ai-status" style="font-size: 13px; color: #007bff; font-weight: bold;">Đang sẵn sàng đồng hành cùng bạn...</div>
         </div>
         <div class="progress-container">
             <div class="progress-bar-bg">
@@ -170,7 +171,7 @@
 
     <div id="result-screen">
         <div class="result-card">
-            <h2 style="color: var(--caee-blue); margin-bottom: 20px; font-size: 1.8rem;">KẾT QUẢ THI</h2>
+            <h2 style="color: var(--caee-blue); margin-bottom: 20px; font-size: 1.8rem;">KẾT QUẢ CỦA BẠN</h2>
             <div style="margin-bottom: 20px; line-height: 1.8; font-size: 1.1rem; text-align: left; padding: 0 20px;">
                 • Học viên: <b id="res-name" style="text-transform: uppercase; color: #d32f2f;">---</b><br>
                 • Ngày sinh: <b id="res-dob">---</b><br>
@@ -181,7 +182,7 @@
                 <small style="font-size: 0.9rem; font-weight: bold; color: #666;">/ 30 CÂU</small>
             </div>
             <div id="res-badge" class="status-badge">---</div>
-            <div style="background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 12px; font-weight: 800;">KẾT QUẢ ĐƯỢC LƯU DÙNG ĐỂ XÉT CẤP CHỨNG CHỈ NGHỀ.</div>
+            <div style="background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 12px; font-weight: 800;">DỮ LIỆU ĐÃ ĐƯỢC LƯU TRỰC TUYẾN</div>
             <p style="margin-top: 20px; color: #666; font-style: italic;">Hệ thống tự động làm mới sau <span id="countdown">15</span> giây...</p>
         </div>
     </div>
