@@ -29,13 +29,18 @@
         .bg-can-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-6.5/main/bg-can-truc.jpg'); }
         .bg-cau-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-6.5/main/bg-cau-truc.jpg'); }
 
-        .welcome-container, #quiz-content, .sidebar-right > div, #ai-container {
-            background: #ffffff !important; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-            border: 2px solid var(--caee-blue);
-        }
-
+.welcome-container, #quiz-content, .sidebar-right > div, #ai-container {
+    /* 1. Làm nền trắng trong suốt (0.8 là độ đậm đặc 80%) */
+    background: rgba(255, 255, 255, 0.8) !important; 
+    
+    /* 2. Lệnh quan trọng nhất để làm mờ ảnh phía sau khung */
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); /* Hỗ trợ trình duyệt Safari/iPhone */
+    
+    border-radius: 15px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Viền mờ cho sang trọng */
+}
         #ai-container {
             display: none; max-width: 1300px; margin: 10px auto; 
             padding: 12px 20px; align-items: center; gap: 15px; 
