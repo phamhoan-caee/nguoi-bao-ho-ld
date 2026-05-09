@@ -457,21 +457,34 @@
             if(ans && ['A','B','C','D'][q.options.indexOf(ans.selected)] === q.answer) score++;
         });
 
-        const score10 = ((score / 30) * 10).toFixed(1); 
-        const status = score >= 25 ? "ĐẠT" : "KHÔNG ĐẠT";
+  // 1. Tính toán điểm số hệ 10 và trạng thái
+        const score10 = parseFloat(((score / 30) * 10).toFixed(1));
+        const status = score10 >= 5.0 ? "ĐẠT" : "KHÔNG ĐẠT";
 
-        // Cập nhật lên giao diện
+        // 2. Cập nhật thông tin học viên lên bảng kết quả
         document.getElementById('res-name').innerText = document.getElementById('studentName').value;
         document.getElementById('res-dob').innerText = document.getElementById('studentDOB').value || "Chưa nhập";
         document.getElementById('res-id').innerText = document.getElementById('khoaThi').value;
         document.getElementById('res-score').innerText = score;
-        document.getElementById('res-badge').innerText = score10 + " ĐIỂM";
-        
+
+        // 3. Kích hoạt phong cách kỹ thuật số (Đổi màu vòng tròn và badge)
+        const scoreCircle = document.querySelector('.score-circle');
         const badge = document.getElementById('res-badge');
         const disc = document.getElementById('res-disclaimer');
-        badge.style.backgroundColor = status === "ĐẠT" ? "#28a745" : "#dc3545";
-        if(status === "ĐẠT") disc.classList.add('pass');
-        
+
+        if (score10 >= 5.0) {
+            scoreCircle.className = 'score-circle score-digital-pass';
+            badge.style.backgroundColor = "#28a745";
+            disc.classList.add('pass');
+        } else {
+            scoreCircle.className = 'score-circle score-digital-fail';
+            badge.style.backgroundColor = "#dc3545";
+            disc.classList.remove('pass');
+        }
+
+        badge.innerText = score10 + " ĐIỂM";
+
+        // 4. Hiển thị màn hình kết quả
         document.getElementById('result-screen').style.display = 'flex';
 
         // Gửi dữ liệu Google Sheets
