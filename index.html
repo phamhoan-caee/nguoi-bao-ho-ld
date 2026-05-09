@@ -142,7 +142,18 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
         
-        .option-item { border: 2px solid #eee; border-radius: 8px; padding: 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; font-weight: 600; color: #333; }
+      .option-item {
+    background: rgba(255, 255, 255, 0.7) !important; /* Tăng độ đục từ 0.4 lên 0.7 */
+    color: #000000 !important; /* Chữ đen tuyền để dễ đọc nhất */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    transition: all 0.2s;
+}
+        /* Hiệu ứng khi di chuột vào hoặc khi được chọn */
+.option-item:hover, .option-item.selected {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-left: 5px solid #0056b3; /* Thêm vạch xanh bên trái để nhấn mạnh */
+}
         .option-item.selected { border-color: var(--btn-blue); background: #eef2ff; }
         .option-item.correct { background: #d4edda !important; border-color: #28a745 !important; }
         .option-item.wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
