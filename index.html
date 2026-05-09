@@ -134,31 +134,45 @@
         }
 
         .result-card h2 { color: var(--caee-blue); margin-bottom: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        
+/* Vòng tròn phong cách Kỹ thuật số */
         .score-circle { 
-            width: 110px; height: 110px; 
+            width: 140px; height: 140px; 
             border-radius: 50%; 
-            border: 6px solid rgba(0, 51, 153, 0.1); 
-            margin: 20px auto; 
-            display: flex; flex-direction: column; justify-content: center; 
-            font-size: 2.2rem; font-weight: 900; color: #000; 
-            border-top-color: var(--caee-blue); /* Tạo hiệu ứng vòng tròn tiến trình */
-            background: rgba(255,255,255,0.3);
+            border: 8px solid rgba(255,255,255,0.1); 
+            margin: 15px auto; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+            transition: all 0.5s ease;
+/* Chữ số bên trong vòng tròn */
+        #res-score { font-size: 2.5rem; font-weight: 900; line-height: 1; }
+        .score-circle small { font-size: 0.8rem; font-weight: 700; opacity: 0.8; }
+
+        /* Hiệu ứng màu Kỹ thuật số: Xanh (Đạt) */
+        .score-digital-pass { 
+            border-top-color: #28a745 !important; 
+            border-right-color: #28a745 !important;
+            color: #28a745; 
+            text-shadow: 0 0 15px rgba(40, 167, 69, 0.6);
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.2), inset 0 0 15px rgba(40, 167, 69, 0.1);
         }
 
-        /* Tinh chỉnh Badge điểm số cho rực rỡ hơn */
-        .status-badge { 
-            display: inline-block; 
-            padding: 10px 40px; 
-            border-radius: 50px; 
-            color: white; 
-            font-weight: 800; 
-            margin-bottom: 25px; 
-            font-size: 1.2rem; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        /* Hiệu ứng màu Kỹ thuật số: Đỏ (Trượt) */
+        .score-digital-fail { 
+            border-top-color: #dc3545 !important; 
+            border-right-color: #dc3545 !important;
+            color: #dc3545; 
+            text-shadow: 0 0 15px rgba(220, 53, 69, 0.6);
+            box-shadow: 0 0 20px rgba(220, 53, 69, 0.2), inset 0 0 15px rgba(220, 53, 69, 0.1);
         }
-        
+
+        /* Badge điểm nằm gọn bên dưới chữ số trong vòng tròn nếu thầy muốn, 
+           hoặc giữ nguyên vị trí cũ nhưng đổi màu đồng bộ */
+        .status-badge { 
+            display: inline-block; padding: 6px 20px; border-radius: 50px; 
+            color: white; font-weight: 800; margin-top: 5px; font-size: 1rem; 
+        }
         .disclaimer-box { 
             background: rgba(255, 255, 255, 0.4); 
             color: #d32f2f; 
@@ -409,8 +423,28 @@
             if(ans && ['A','B','C','D'][q.options.indexOf(ans.selected)] === q.answer) score++;
         });
 
-        const score10 = ((score / 30) * 10).toFixed(1); 
-        const status = score >= 25 ? "ĐẠT" : "KHÔNG ĐẠT";
+       // Tính toán điểm và trạng thái nộp bài
+        const score10 = parseFloat(((score / 30) * 10).toFixed(1));
+        const status = score10 >= 5.0 ? "ĐẠT" : "KHÔNG ĐẠT";
+
+        // Cập nhật thông tin học viên lên giao diện kết quả
+        document.getElementById('res-name').innerText = document.getElementById('studentName').value;
+        document.getElementById('res-dob').innerText = document.getElementById('studentDOB').value || "Chưa nhập";
+        document.getElementById('res-id').innerText = document.getElementById('khoaThi').value;
+        document.getElementById('res-score').innerText = score;
+
+        // Kích hoạt phong cách kỹ thuật số cho vòng tròn và badge điểm
+        const scoreCircle = document.querySelector('.score-circle');
+        const badge = document.getElementById('res-badge');
+
+        if (score10 >= 5.0) {
+            scoreCircle.className = 'score-circle score-digital-pass';
+            badge.style.backgroundColor = "#28a745";
+        } else {
+            scoreCircle.className = 'score-circle score-digital-fail';
+            badge.style.backgroundColor = "#dc3545";
+        }
+        badge.innerText = score10 + " ĐIỂM";
 
         // Cập nhật lên giao diện
         document.getElementById('res-name').innerText = document.getElementById('studentName').value;
