@@ -175,23 +175,25 @@
             </div>
         </div>
     </div>
-
-    <div id="result-screen">
+<div id="result-screen">
         <div class="result-card">
-            <h2 style="color: var(--caee-blue); margin-bottom: 20px;">KẾT QUẢ THI</h2>
-            <div style="margin-bottom: 20px; line-height: 1.8; font-size: 1.1rem; text-align: left; padding: 0 20px;">
-                Học viên: <b id="res-name" style="text-transform: uppercase; color: #d32f2f;">---</b><br>
-                Kết quả: <b id="res-score-detail">---</b>
+            <div style="font-size: 1.5rem; font-weight: bold; color: var(--caee-blue); margin-bottom: 20px;">KẾT QUẢ THI</div>
+            <div style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; text-align: center;">
+                Học viên: <b id="res-name" style="color: var(--caee-blue); text-transform: uppercase;">---</b><br>
+                Ngày sinh: <b id="res-dob">---</b><br>
+                Khóa thi: <b id="res-id">---</b>
             </div>
-            <div class="score-circle"><span id="res-score">0</span><small>/30</small></div>
+            <div class="score-circle">
+                <span id="res-score">0</span>
+                <small style="font-size: 0.8rem; color: #666; font-weight: normal;">/ 30 câu</small>
+            </div>
             <div id="res-badge" class="status-badge">---</div>
             <div class="notice-text">
                 KẾT QUẢ NÀY ĐƯỢC NHÀ TRƯỜNG LƯU LẠI VÀ DÙNG ĐỂ XÉT CẤP CHỨNG CHỈ SƠ CẤP NGHỀ.
             </div>
-            <p style="margin-top: 20px; color: #666; font-style: italic;">Hệ thống tự động làm mới sau <span id="countdown">15</span> giây...</p>
+            <p style="margin-top: 25px; color: #666; font-size: 0.85rem;">Hệ thống tự đóng sau <span id="countdown">15</span> giây...</p>
         </div>
     </div>
-
 <script>
     const BASE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX7gLNKe58sjBUDPDQOohDehuVD22EFgCe472mKd61a6d_FPIYFoh21DEdi9_BS7yukbuwy69Q9oZZ/pub?output=csv&gid=";
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwG-oFBhn_GiGypEp6k2nzX7JMjG0t8Jil2C1cDJjTVoD_GGWVzbzFybh88WcsxlL1o/exec";
