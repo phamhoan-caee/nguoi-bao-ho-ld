@@ -30,16 +30,34 @@
         .bg-can-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-can-truc.jpg'); }
         .bg-cau-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-cau-truc.jpg'); }
 
-      /* Glassmorphism - Tối ưu độ trong suốt để nhìn rõ ảnh nền */
-        .welcome-container, #quiz-content, .sidebar-right > div, #ai-container, .confirm-modal-content {
-            background: rgba(221, 221, 221, 0.5) !important; /* Độ trong suốt 0.55 giúp nhìn xuyên thấu tốt hơn */
-            backdrop-filter: blur(18px); /* Tăng độ nhòe nền kính để chữ không bị rối */
-            -webkit-backdrop-filter: blur(18px);
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
-            border: 1px solid rgba(255, 255, 255, 0.4); /* Viền sáng nhẹ tạo hiệu ứng nổi khối */
-        }
+  /* Glassmorphism - Tối ưu lại để chữ cực kỳ rõ nét trên nền ảnh */
+.welcome-container, #quiz-content, .sidebar-right > div, #ai-container, .confirm-modal-content {
+    /* Tăng độ tối của nền lên (0.7) để chữ trắng/đen đều nổi bật */
+    background: rgba(255, 255, 255, 0.8) !important; 
+    
+    /* Tăng độ mờ hậu cảnh để không bị rối mắt bởi chi tiết ảnh nền */
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(15px);
+    
+    border-radius: 15px; 
+    
+    /* Điều chỉnh bóng đổ: mờ hơn, rộng hơn nhưng nhẹ nhàng hơn */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
+    
+    /* Viền trắng mảnh giúp định hình khung rõ ràng */
+    border: 1px solid rgba(255, 255, 255, 0.18); 
+}
+/* Tinh chỉnh lại màu chữ trong các khung để dễ đọc nhất */
+#quiz-content h3, .welcome-container label {
+    color: #000 !important; /* Chữ đen trên nền kính sáng */
+    text-shadow: none;
+}
 
+.option-item:hover {
+    border-color: var(--btn-orange);
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+    transform: scale(1.01);
+}
         #ai-container {
             display: none; max-width: 1300px; margin: 5px auto; 
             padding: 8px 15px; align-items: center; gap: 12px; 
