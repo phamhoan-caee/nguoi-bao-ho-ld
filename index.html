@@ -99,15 +99,17 @@
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
         }
 
-/* Đồng bộ thông tin học viên với tiêu đề Kết Quả Thi */
-#result-screen .result-card div:first-of-type {
-    color: var(--caee-blue) !important; /* Cùng màu xanh tiêu đề */
-    font-weight: 900 !important;      /* Cùng độ đậm cực đại */
-    text-transform: uppercase;         /* Viết hoa toàn bộ */
-    letter-spacing: 1px;               /* Giãn chữ giống tiêu đề */
-    line-height: 2;
-}
-
+#result-screen p {
+            color: var(--caee-blue); /* Chuyển sang màu xanh cùng tông với tiêu đề */
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 700; /* Độ đậm vừa phải để phân biệt với nội dung */
+            margin: 8px 0;
+            font-size: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            text-shadow: none; /* Bỏ phát sáng để chữ sắc nét, dễ đọc */
+        }
         .result-card { 
             /* Đồng bộ thông số background và blur với khung câu hỏi */
             background: rgba(255, 255, 255, 0.7) !important; 
