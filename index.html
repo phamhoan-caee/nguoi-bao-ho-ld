@@ -185,18 +185,20 @@
             </div>
         </div>
     </div>
-
-    <div id="result-screen">
+<div id="result-screen">
         <div class="result-card">
-            <h2 style="color: var(--caee-blue); margin-bottom: 20px;">KẾT QUẢ THI</h2>
-            <div style="margin-bottom: 20px; line-height: 1.8; font-size: 1.1rem; text-align: left; padding: 0 20px;">
+            <div style="font-size: 1.5rem; font-weight: bold; color: var(--caee-blue); margin-bottom: 20px;">KẾT QUẢ THI</div>
+            <div style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; text-align: center;">
                 Học viên: <b id="res-name" style="color: var(--caee-blue); text-transform: uppercase;">---</b><br>
                 Ngày sinh: <b id="res-dob">---</b><br>
                 Khóa thi: <b id="res-id">---</b>
             </div>
-            <div class="score-circle"><span id="res-score">0</span><small>/30</small></div>
+            <div class="score-circle">
+                <span id="res-score">0</span>
+                <small style="font-size: 0.8rem; color: #666; font-weight: normal;">/ 30 câu</small>
+            </div>
             <div id="res-badge" class="status-badge">---</div>
-           <div class="notice-text">
+            <div class="notice-text">
                 KẾT QUẢ NÀY ĐƯỢC NHÀ TRƯỜNG LƯU LẠI VÀ DÙNG ĐỂ XÉT CẤP CHỨNG CHỈ SƠ CẤP NGHỀ.
             </div>
             <p style="margin-top: 25px; color: #666; font-size: 0.85rem;">Hệ thống tự đóng sau <span id="countdown">15</span> giây...</p>
@@ -387,16 +389,16 @@
 
         const score10 = ((score / 30) * 10).toFixed(1); 
         const status = score >= 25 ? "ĐẠT" : "KHÔNG ĐẠT";
-// Hiển thị kết quả lên màn hình
+
         document.getElementById('res-name').innerText = document.getElementById('studentName').value;
         document.getElementById('res-score').innerText = score;
         document.getElementById('res-score-detail').innerText = score + "/30 câu (" + score10 + " điểm)";
         document.getElementById('res-badge').innerText = status;
         document.getElementById('res-badge').style.backgroundColor = status === "ĐẠT" ? "#28a745" : "#dc3545";
         document.getElementById('result-screen').style.display = 'flex';
-  // AI THÔNG BÁO KẾT QUẢ
+
         aiSpeakShort(`Hoàn thành bài thi. Kết quả của bạn là ${score10} điểm. Trạng thái ${status}.`);
-// Gửi dữ liệu về Google Sheets
+
         const formData = new URLSearchParams();
         formData.append('maThi', document.getElementById('maThi').value.trim());
         formData.append('name', document.getElementById('studentName').value.toUpperCase());
@@ -405,7 +407,7 @@
         formData.append('status', status);
 
         try { await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: formData }); } catch (e) {}
- // Đếm ngược tự động tải lại trang
+
         let c = 15;
         const cd = setInterval(() => { 
             if(c > 0) { c--; document.getElementById('countdown').innerText = c; }
