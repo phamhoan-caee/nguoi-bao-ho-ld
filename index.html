@@ -387,16 +387,16 @@
 
         const score10 = ((score / 30) * 10).toFixed(1); 
         const status = score >= 25 ? "ĐẠT" : "KHÔNG ĐẠT";
-
+// Hiển thị kết quả lên màn hình
         document.getElementById('res-name').innerText = document.getElementById('studentName').value;
         document.getElementById('res-score').innerText = score;
         document.getElementById('res-score-detail').innerText = score + "/30 câu (" + score10 + " điểm)";
         document.getElementById('res-badge').innerText = status;
         document.getElementById('res-badge').style.backgroundColor = status === "ĐẠT" ? "#28a745" : "#dc3545";
         document.getElementById('result-screen').style.display = 'flex';
-
+  // AI THÔNG BÁO KẾT QUẢ
         aiSpeakShort(`Hoàn thành bài thi. Kết quả của bạn là ${score10} điểm. Trạng thái ${status}.`);
-
+// Gửi dữ liệu về Google Sheets
         const formData = new URLSearchParams();
         formData.append('maThi', document.getElementById('maThi').value.trim());
         formData.append('name', document.getElementById('studentName').value.toUpperCase());
@@ -405,7 +405,7 @@
         formData.append('status', status);
 
         try { await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: formData }); } catch (e) {}
-
+ // Đếm ngược tự động tải lại trang
         let c = 15;
         const cd = setInterval(() => { 
             if(c > 0) { c--; document.getElementById('countdown').innerText = c; }
