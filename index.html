@@ -30,28 +30,27 @@
         .bg-can-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-can-truc.jpg'); }
         .bg-cau-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-cau-truc.jpg'); }
 
-   /* Glassmorphism - Chỉ làm mờ khung nội dung quan trọng */
-.welcome-container, #quiz-content, .sidebar-right > div, #ai-container, .confirm-modal-content, .result-card {
-    background: rgba(255, 255, 255, 0.7) !important; /* Nền trắng trong suốt */
-    backdrop-filter: blur(12px); /* Chỉ làm mờ phần nền bên dưới khung */
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Hiệu ứng chuyển động mượt */
-}
+      /* Glassmorphism - Tối ưu độ trong suốt để nhìn rõ ảnh nền */
+        .welcome-container, #quiz-content, .sidebar-right > div, #ai-container, .confirm-modal-content {
+            background: rgba(255, 255, 255, 0.55) !important; /* Độ trong suốt 0.55 giúp nhìn xuyên thấu tốt hơn */
+            backdrop-filter: blur(18px); /* Tăng độ nhòe nền kính để chữ không bị rối */
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.4); /* Viền sáng nhẹ tạo hiệu ứng nổi khối */
+        }
 
         #ai-container {
-            display: none; max-width: 1300px; margin: 5px auto; 
-            padding: 8px 15px; align-items: center; gap: 12px; 
-            border-left: 6px solid var(--btn-orange);
+            display: none; max-width: 1300px; margin: 10px auto; 
+            padding: 12px 20px; align-items: center; gap: 15px; 
+            border-left: 8px solid var(--btn-orange);
             flex-wrap: wrap;
         }
 
         .progress-container { width: 100%; margin-top: 10px; display: flex; align-items: center; gap: 10px; }
-        .progress-bar-bg { flex-grow: 1; height: 8px; background: #ddd; border-radius: 10px; overflow: hidden; }
+        .progress-bar-bg { flex-grow: 1; height: 12px; background: #ddd; border-radius: 10px; overflow: hidden; }
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #28a745, #85ffbd); transition: width 0.4s ease; }
-        #progress-text { font-weight: 800; color: var(--caee-blue); min-width: 50px; text-align: right; }
+        #progress-text { font-weight: 900; color: var(--caee-blue); min-width: 50px; text-align: right; }
 
         /* Custom Modal */
         #confirm-modal-overlay {
@@ -61,14 +60,14 @@
         .confirm-modal-content { width: 90%; max-width: 400px; padding: 30px; text-align: center; }
 
         .ai-avatar {
-            position: relative; width: 48px; height: 48px; 
+            position: relative; width: 65px; height: 65px; 
             border-radius: 50%; border: 2px solid #ddd; overflow: hidden; flex-shrink: 0;
         }
         .ai-avatar img { width: 100%; height: 100%; object-fit: cover; }
         
         .speaking-waves {
             display: none; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%);
-            gap: 3px; align-items: flex-end; height: 10px;
+            gap: 3px; align-items: flex-end; height: 15px;
         }
         .wave { width: 3px; background: var(--btn-orange); border-radius: 3px; animation: wave-anim 0.5s infinite ease-in-out; }
         @keyframes wave-anim { 0%, 100% { height: 5px; } 50% { height: 15px; } }
@@ -87,15 +86,10 @@
         .btn-start { background: var(--caee-blue); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: transform 0.2s; }
         
         #quiz-screen { padding: 15px; display: none; grid-template-columns: 1fr 320px; gap: 20px; max-width: 1300px; margin: auto; }
-      #quiz-content, .welcome-container {
-    animation: fadeInSlide 0.6s ease-out; /* Hiệu ứng trượt lên khi tải */
-}
-      /* Hiệu ứng khi di chuột vào các ô đáp án */
-.option-item {
-    border: 2px solid rgba(0,0,0,0.05);
-    background: rgba(255, 255, 255, 0.5);
-    transition: all 0.2s ease; /* Chuyển màu mượt mà */
-}
+        #quiz-content { padding: 25px; min-height: 400px; }
+        
+        .option-item { border: 2px solid #eee; border-radius: 8px; padding: 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; font-weight: 600; color: #333; }
+        .option-item.selected { border-color: var(--btn-blue); background: #eef2ff; }
         .option-item.correct { background: #d4edda !important; border-color: #28a745 !important; }
         .option-item.wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
 
@@ -120,7 +114,7 @@
 
         .result-card { 
             /* Đồng bộ thông số background và blur với khung câu hỏi */
-            background: rgba(221, 221, 221, 0.5) !important; 
+            background: rgba(255, 255, 255, 0.85) !important; 
           /* Hiệu ứng làm mờ hậu cảnh phía sau khung */
             backdrop-filter: blur(20px); 
             -webkit-backdrop-filter: blur(10px);
@@ -270,9 +264,9 @@
             </div>
             <div style="display:flex; align-items:center; margin: 15px 0; justify-content: center; gap:10px; background: rgba(227, 242, 253, 0.8); padding: 10px; border-radius: 10px;">
                 <input type="checkbox" id="modeToggle" style="width:20px; height:20px; cursor: pointer;">
-                <label for="modeToggle" style="cursor:pointer; font-weight: 700; color: #0d47a1;">Chế độ ôn tập</label>
+                <label for="modeToggle" style="cursor:pointer; font-weight: 700; color: #0d47a1;">Chế độ ÔN TẬP (Có AI đọc câu hỏi)</label>
             </div>
-            <button class="btn-start" id="btnStart" onclick="validateAndStart()">VÀO THI ➔</button>
+            <button class="btn-start" id="btnStart" onclick="validateAndStart()">VÀO THI NGAY ➔</button>
         </div>
     </div>
 
@@ -284,7 +278,7 @@
             </div>
         </div>
         <div style="flex-grow: 1;">
-            <div style="color: var(--caee-blue); font-weight: 800; font-size: 16px;">CHÀO MỪNG BẠN ĐẾN VỚI HỆ THỐNG THI CAEE</div>
+            <div style="color: var(--caee-blue); font-weight: 800; font-size: 16px;">HỆ THỐNG TRỢ LÝ ẢO CAEE</div>
             <div style="color: #333; font-size: 14px; font-weight: 600;">Học viên: <span id="display-name" style="color: #d32f2f;">---</span></div>
         </div>
         <div class="progress-container">
@@ -348,7 +342,7 @@ function playWarningAI(count) {
     const msg = new SpeechSynthesisUtterance();
     msg.lang = 'vi-VN';
     if (count < 3) {
-        msg.text = `Cảnh báo lần ${count}! Học viên không được thoát bài thi. Nếu vi phạm quá 3 lần hệ thống sẽ tự động nộp bài!`;
+        msg.text = `Cảnh báo lần ${count}! Học viên không được thoát tab. Vi phạm quá 3 lần hệ thống sẽ tự động nộp bài!`;
     } else {
         msg.text = "Bạn đã vi phạm 3 lần. Hệ thống đang tự động nộp bài thi của bạn!";
     }
