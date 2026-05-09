@@ -86,7 +86,61 @@
         .btn-start { background: var(--caee-blue); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: transform 0.2s; }
         
         #quiz-screen { padding: 15px; display: none; grid-template-columns: 1fr 320px; gap: 20px; max-width: 1300px; margin: auto; }
-        #quiz-content { padding: 25px; min-height: 400px; }
+      /* Tinh chỉnh khung chứa nội dung câu hỏi để trong suốt hơn */
+#quiz-content {
+    background: rgba(255, 255, 255, 0.4) !important; /* Giảm độ đục để nhìn rõ ảnh nền */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+/* Tách biệt các nút Lùi lại / Tiếp theo ra khỏi khung trắng */
+.quiz-navigation-buttons {
+    display: flex; 
+    justify-content: space-between; 
+    margin-top: 20px; 
+    gap: 15px;
+}
+
+.btn-nav {
+    background: rgba(51, 102, 255, 0.8) !important; /* Màu xanh đặc trưng nhưng có độ trong */
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-nav:hover {
+    background: rgba(51, 102, 255, 1) !important;
+    transform: translateY(-2px);
+}
+
+.btn-nav:disabled {
+    background: rgba(150, 150, 150, 0.5) !important;
+    cursor: not-allowed;
+}
+
+/* Làm cho Sơ đồ câu hỏi trong suốt hoàn toàn */
+.sidebar-right > div {
+    background: rgba(255, 255, 255, 0.3) !important; /* Cực kỳ trong suốt */
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: none !important; /* Loại bỏ bóng đổ nặng nề */
+}
+
+/* Chỉnh các ô số trong sơ đồ câu hỏi */
+#nav-grid div {
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
         
         .option-item { border: 2px solid #eee; border-radius: 8px; padding: 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; font-weight: 600; color: #333; }
         .option-item.selected { border-color: var(--btn-blue); background: #eef2ff; }
@@ -396,25 +450,35 @@ function playWarningAI(count) {
     }
 
     function showQuestion(idx) {
-        currentQuestionIndex = idx;
-        const q = selectedQuestions[idx];
-        const stored = studentAnswers.find(a => a.qIndex === idx);
-        const labels = ['A', 'B', 'C', 'D'];
-        let html = `<h3 style="color:var(--caee-blue); margin-bottom:15px;">Câu ${idx + 1}: ${q.question}</h3>`;
-        if(q.image) html += `<div style="text-align:center"><img src="${q.image}" style="max-width:100%; border-radius:12px; margin-bottom:15px; border:1px solid #ddd;"></div>`;
-        q.options.forEach((opt, i) => {
-            let cls = stored && opt === stored.selected ? "selected" : "";
-            html += `<div class="option-item ${cls}" onclick="selectAns(${idx}, '${opt.replace(/'/g, "\\'")}')"><b>${labels[i]}.</b> ${opt}</div>`;
-        });
-        html += `<div style="display:flex; justify-content:space-between; margin-top:20px; gap:15px;">
-                    <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx-1})" ${idx===0?'disabled':''}>Lùi lại</button>
-                    <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx+1})" ${idx===29?'disabled':''}>Tiếp theo</button>
-                 </div>`;
-        document.getElementById('quiz-content').innerHTML = html;
-        renderGrid();
-        updateProgressBar();
-        aiSpeakQuestion(q);
-    }
+    currentQuestionIndex = idx;
+    const q = selectedQuestions[idx];
+    const stored = studentAnswers.find(a => a.qIndex === idx);
+    const labels = ['A', 'B', 'C', 'D'];
+    
+    // Phần nội dung câu hỏi
+    let html = `<div id="question-box">
+                    <h3 style="color:var(--caee-blue); margin-bottom:15px;">Câu ${idx + 1}: ${q.question}</h3>`;
+    
+    if(q.image) html += `<div style="text-align:center"><img src="${q.image}" style="max-width:100%; border-radius:12px; margin-bottom:15px; border:1px solid #ddd;"></div>`;
+    
+    q.options.forEach((opt, i) => {
+        let cls = stored && opt === stored.selected ? "selected" : "";
+        html += `<div class="option-item ${cls}" onclick="selectAns(${idx}, '${opt.replace(/'/g, "\\'")}')"><b>${labels[i]}.</b> ${opt}</div>`;
+    });
+    
+    html += `</div>`; // Đóng khung trắng nội dung
+
+    // Phần nút bấm nằm RIÊNG BIỆT phía dưới
+    html += `<div class="quiz-navigation-buttons">
+                <button class="btn-nav" onclick="showQuestion(${idx-1})" ${idx===0?'disabled':''}>Lùi lại</button>
+                <button class="btn-nav" onclick="showQuestion(${idx+1})" ${idx===29?'disabled':''}>Tiếp theo</button>
+             </div>`;
+             
+    document.getElementById('quiz-content').innerHTML = html;
+    renderGrid();
+    updateProgressBar();
+    aiSpeakQuestion(q);
+}
 
     function selectAns(qIdx, ans) {
         if(isSubmitted) return;
