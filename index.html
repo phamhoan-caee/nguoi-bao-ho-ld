@@ -342,7 +342,7 @@ function playWarningAI(count) {
     const msg = new SpeechSynthesisUtterance();
     msg.lang = 'vi-VN';
     if (count < 3) {
-        msg.text = `Cảnh báo lần ${count}! Học viên không được thoát tab. Vi phạm quá 3 lần hệ thống sẽ tự động nộp bài!`;
+        msg.text = `Cảnh báo lần ${count}! Học viên không được thoát bài thi. Nếu vi phạm quá 3 lần hệ thống sẽ tự động nộp bài!`;
     } else {
         msg.text = "Bạn đã vi phạm 3 lần. Hệ thống đang tự động nộp bài thi của bạn!";
     }
