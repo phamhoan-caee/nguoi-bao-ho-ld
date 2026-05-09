@@ -135,18 +135,65 @@
 
         .result-card h2 { color: var(--caee-blue); margin-bottom: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
         
+     /* VÒNG TRÒN ĐIỂM PHONG CÁCH KỸ THUẬT SỐ ĐIỆN TỬ */
         .score-circle { 
-            width: 110px; height: 110px; 
+            width: 160px; height: 160px; /* Tăng kích thước để rõ nét hơn */
             border-radius: 50%; 
-            border: 6px solid rgba(0, 51, 153, 0.1); 
+            /* Viền ngoài mờ ảo */
+            border: 4px solid rgba(255, 255, 255, 0.1); 
             margin: 20px auto; 
-            display: flex; flex-direction: column; justify-content: center; 
-            font-size: 1.5rem; font-weight: 900; color: #000; 
-            border-top-color: var(--caee-blue);
-            /* Tạo hiệu ứng vòng tròn tiến trình */
-            background: rgba(255,255,255,0.3);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(0, 0, 0, 0.2); /* Nền hơi tối để nổi bật hiệu ứng phát sáng */
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px rgba(255,255,255,0.1);
+            transition: all 0.4s ease;
         }
 
+        /* Tạo thêm một vòng sáng chạy quanh (Digital Ring) */
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            /* Màu mặc định, sẽ bị ghi đè bởi class JS */
+            border-top-color: #007bff; 
+            border-right-color: #007bff;
+            animation: rotateRing 2s linear infinite;
+        }
+
+        @keyframes rotateRing {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Chỉnh con số bên trong */
+        #res-score { 
+            font-size: 1.5rem; /* Số to rõ ràng */
+            font-weight: 900; 
+            line-height: 1;
+            margin-bottom: -5px;
+        }
+
+        .score-circle small { 
+            font-size: 1rem; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        /* Class bổ trợ cho JavaScript để đổi màu rực rỡ */
+        .score-digital-pass { 
+            color: #2ecc71 !important; /* Xanh lá kỹ thuật số */
+            text-shadow: 0 0 15px rgba(46, 204, 113, 0.8);
+        }
+        .score-digital-pass::before { border-top-color: #2ecc71; border-right-color: #2ecc71; }
+
+        .score-digital-fail { 
+            color: #e74c3c !important; /* Đỏ rực cảnh báo */
+            text-shadow: 0 0 15px rgba(231, 76, 60, 0.8);
+        }
+        .score-digital-fail::before { border-top-color: #e74c3c; border-right-color: #e74c3c; }
         /* Tinh chỉnh Badge điểm số cho rực rỡ hơn */
         .status-badge { 
             display: inline-block; 
