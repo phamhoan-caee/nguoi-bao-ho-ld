@@ -83,8 +83,11 @@
         .welcome-container { width: 95%; max-width: 450px; padding: 30px; }
         
         .form-control { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-weight: 500; }
-        .btn-start { background: var(--success); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: transform 0.2s; }
-        
+        .btn-start:hover {
+            background-color: #003399; /* Xanh đậm hơn một chút */
+            transform: translateY(-2px); /* Nút nhấc nhẹ lên khi chạm vào */
+            box-shadow: 0 6px 20px rgba(0, 51, 153, 0.6);
+        }
         #quiz-screen { padding: 15px; display: none; grid-template-columns: 1fr 320px; gap: 20px; max-width: 1300px; margin: auto; }
         #quiz-content { padding: 25px; min-height: 400px; }
         
