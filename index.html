@@ -6,16 +6,20 @@
     <title>HỆ THỐNG THI TRẮC NGHIỆM NGHỀ KHOA MÁY THI CÔNG - CAEE</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        :root {
-            --caee-blue: #003399; --header-blue: #0040cc;
-            --btn-orange: #ff6600; --btn-blue: #3366ff;
-            --success: #28a745; --danger: #dc3545;
-        }
-
+       :root {
+    --caee-blue: #1a73e8; /* Xanh hiện đại Google */
+    --header-blue: #f8f9fa; /* Nền sáng */
+    --btn-orange: #fb8c00; 
+    --btn-blue: #1a73e8;
+    --success: #34a853; 
+    --danger: #ea4335;
+    --glass-bg: rgba(255, 255, 255, 0.85); /* Nền trắng trong suốt */
+}
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
         
         body { 
-            background-color: #000;
+            background-color:#f0f2f5;
+            color: #202124;
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -31,25 +35,23 @@
         .bg-cau-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-cau-truc.jpg'); }
 
       /* Glassmorphism - Tối ưu độ trong suốt để nhìn rõ ảnh nền */
-        .welcome-container, #quiz-content, .sidebar-right > div, #ai-container, .confirm-modal-content {
-            background: rgba(221, 221, 221, 0.1) !important; /* Độ trong suốt 0.55 giúp nhìn xuyên thấu tốt hơn */
-            backdrop-filter: blur(15px); /* Tăng độ nhòe nền kính để chữ không bị rối */
-            -webkit-backdrop-filter: blur(18px);
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.37); /* Đổ bóng sâu hơn */
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Viền sáng nhẹ tạo hiệu ứng nổi khối */
-        }
+        .welcome-container, #quiz-content, .sidebar-right > div, #ai-container, .confirm-modal-content, .result-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6); /* Viền sáng bóng */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ nhàng */
+    border-radius: 20px;
+}
 
         #ai-container {
-            display: none; max-width: 1300px; margin: 5px auto; 
-            padding: 6px 15px; align-items: center; gap: 10px; 
-            border-left: 6px solid var(--btn-orange);
-            flex-wrap: wrap;
-        }
+           border-left: 6px solid var(--caee-blue); /* Đổi sang viền xanh hiện đại */
+    padding: 10px 20px;
+}
 
         .progress-container { width: 100%; margin-top: 10px; display: flex; align-items: center; gap: 10px; }
-        .progress-bar-bg { flex-grow: 1; height: 8px; background: #ddd; border-radius: 10px; overflow: hidden; }
-        #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #28a745, #85ffbd); transition: width 0.4s ease; }
+        .progress-bar-bg { flex-grow: 1; height: 8px; background: #e0e0e0; border-radius: 10px; overflow: hidden; }
+        #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #4285f4, #34a853); transition: width 0.4s ease; }
         #progress-text { font-weight: 800; color: var(--caee-blue); min-width: 50px; text-align: right; }
 
         /* Custom Modal */
@@ -83,13 +85,25 @@
         .welcome-container { width: 95%; max-width: 450px; padding: 30px; }
         
         .form-control { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-weight: 500; }
-        .btn-start { background: var(--caee-blue); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: transform 0.2s; }
-        
+        .btn-start {
+    background: var(--caee-blue);
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.2);
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+}
         #quiz-screen { padding: 15px; display: none; grid-template-columns: 1fr 320px; gap: 20px; max-width: 1300px; margin: auto; }
         #quiz-content { padding: 25px; min-height: 400px; }
         
-        .option-item { border: 2px solid #eee; border-radius: 8px; padding: 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; font-weight: 600; color: #333; }
-        .option-item.selected { border-color: var(--btn-blue); background: #eef2ff; }
+        .option-item { border: 1px solid #dadce0;
+    background: #ffffff;
+    color: #3c4043;
+    transition: all 0.2s ease;
+}
+        .option-item.selected { background: #e8f0fe !important;
+    border-color: var(--caee-blue) !important;
+    color: var(--caee-blue) !important;
+}
+}
         .option-item.correct { background: #d4edda !important; border-color: #28a745 !important; }
         .option-item.wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
 
