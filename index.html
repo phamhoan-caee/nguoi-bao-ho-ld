@@ -127,7 +127,35 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
             animation: slideUp 0.5s ease-out; /* Thêm hiệu ứng hiện ra cho đẹp */
         }
+/* PHONG CÁCH CÔNG NGHỆ CHO THÔNG TIN HỌC VIÊN */
+        #result-screen p {
+            color: #00e5ff; /* Màu xanh Cyan kỹ thuật sáng rực */
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.5); /* Hiệu ứng phát sáng nhẹ */
+            margin: 8px 0;
+            font-size: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
 
+        /* Làm nổi bật dữ liệu thực tế (Tên, Ngày sinh, Khóa thi) */
+        #res-name, #res-dob, #res-id {
+            color: #ffffff; /* Dữ liệu màu trắng để nổi bật trên nền xanh */
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Thêm nhãn giả lập bảng điện tử trước mỗi dòng */
+        #result-screen p::before {
+            content: '▶';
+            font-size: 0.7rem;
+            color: #00e5ff;
+            align-self: center;
+        }
         @keyframes slideUp {
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
