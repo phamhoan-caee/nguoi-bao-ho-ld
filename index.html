@@ -99,17 +99,19 @@
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
         }
 
-#result-screen p {
-            color: var(--caee-blue); /* Chuyển sang màu xanh cùng tông với tiêu đề */
-            font-family: 'Segoe UI', sans-serif;
-            font-weight: 700; /* Độ đậm vừa phải để phân biệt với nội dung */
-            margin: 8px 0;
-            font-size: 1rem;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            text-shadow: none; /* Bỏ phát sáng để chữ sắc nét, dễ đọc */
+     /* GIAO DIỆN KẾT QUẢ - ĐÃ ĐƯỢC ĐỒNG BỘ GLASSMORPHISM */
+        #result-screen { 
+            display: none; 
+            position: fixed; 
+            top:0; left:0; 
+            width:100%; height:100%; 
+            background: rgba(0, 0, 0, 0.7); /* Làm tối nền một chút để bảng kết quả nổi bật */
+            z-index: 9999; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
         }
+
         .result-card { 
             /* Đồng bộ thông số background và blur với khung câu hỏi */
             background: rgba(255, 255, 255, 0.7) !important; 
@@ -125,43 +127,13 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
             animation: slideUp 0.5s ease-out; /* Thêm hiệu ứng hiện ra cho đẹp */
         }
-/* PHONG CÁCH CÔNG NGHỆ CHO THÔNG TIN HỌC VIÊN */
-        #result-screen p {
-            color:  var(--caee-blue); 
-            /* Màu xanh Cyan kỹ thuật sáng rực */
-            font-family: 'Segoe UI', sans-serif;
-            font-weight: 800;
-           text-shadow: none;
-            margin: 8px 0;
-            font-size: 0.9rem;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
 
-        /* Làm nổi bật dữ liệu thực tế (Tên, Ngày sinh, Khóa thi) */
-        #res-name, #res-dob, #res-id {
-            color:  var(--caee-blue);
-            /* Dữ liệu màu xanh để nổi bật trên nền */
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        /* Thêm nhãn giả lập bảng điện tử trước mỗi dòng */
-        #result-screen p::before {
-            content: '▶';
-            font-size: 0.7rem;
-            color: #2ecc71;
-            align-self: center;
-        }
         @keyframes slideUp {
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .result-card h2 { color: var(--caee-blue); margin-bottom: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .result-card h2 { color: var(--caee-blue); margin-bottom: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
         
      /* VÒNG TRÒN ĐIỂM PHONG CÁCH KỸ THUẬT SỐ ĐIỆN TỬ */
         .score-circle { 
@@ -171,8 +143,7 @@
             border: 4px solid rgba(255, 255, 255, 0.1); 
             margin: 20px auto; 
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0, 0, 0, 0.2); 
-            /* Nền hơi tối để nổi bật hiệu ứng phát sáng */
+            background: rgba(0, 0, 0, 0.2); /* Nền hơi tối để nổi bật hiệu ứng phát sáng */
             position: relative;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px rgba(255,255,255,0.1);
             transition: all 0.4s ease;
@@ -538,3 +509,4 @@
 </script>
 </body>
 </html>
+
