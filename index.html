@@ -9,41 +9,42 @@
         :root {
             --caee-blue: #003399; --header-blue: #0040cc;
             --btn-orange: #ff6600; --btn-blue: #3366ff;
-            --success: #28a745; --danger: #dc3545;
+            --thành công: #28a745; --nguy hiểm: #dc3545;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
         
-        body { 
-            background-color: #000;
+        thân hình {
+            màu nền: #000;
             background-size: cover;
-            background-position: center;
+            vị trí nền: trung tâm;
             background-attachment: fixed;
             background-repeat: no-repeat;
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            overflow-x: hidden;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            overflow-x: ẩn;
             transition: background-image 0.5s ease-in-out;
         }
 
-        /* Hình nền raw */
-        .bg-xe-nang { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-xe-nang.jpg'); }
+        /* Hình ảnh thô */
+        .bg-xe-nang { hình nền: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-xe-nang.jpg'); }
         .bg-can-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-can-truc.jpg'); }
-        .bg-cau-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-cau-truc.jpg'); }
+        .bg-cau-truc { hình nền: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-cau-truc.jpg'); }
 
-      /* Glassmorphism - Tối ưu độ trong suốt để nhìn rõ ảnh nền */
+      /* Glassmorphism - Độ ưu tiên tối đa trong suốt để xem nền */
         .welcome-container, #quiz-content, .sidebar-right > div, #ai-container, .confirm-modal-content {
-            background: rgba(255, 255, 255, 0.2) !important; /* Độ trong suốt 0.55 giúp nhìn xuyên thấu tốt hơn */
-            backdrop-filter: blur(18px); /* Tăng độ nhòe nền kính để chữ không bị rối */
+            nền: rgba(255, 255, 255, 0.55) !quan trọng; /* Độ trong suốt 0,55 giúp nhìn xuyên suốt tốt hơn */
+            bộ lọc phông nền: mờ (18px); /* Tăng cường kính nền để chữ không bị rối */
             -webkit-backdrop-filter: blur(18px);
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
-            border: 1px solid rgba(255, 255, 255, 0.4); /* Viền sáng nhẹ tạo hiệu ứng nổi khối */
+            độ cong viền: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            đường viền: rgba rắn 1px(255, 255, 255, 0,4); /* Viền nhẹ nhàng tạo khối ứng dụng nổi */
         }
 
         #ai-container {
-            display: none; max-width: 1300px; margin: 10px auto; 
-            padding: 12px 20px; align-items: center; gap: 15px; 
-            border-left: 8px solid var(--btn-orange);
-            flex-wrap: wrap;
+            display: none; max-width: 1300px; margin: 10px auto;
+            padding: 12px 20px; align-items: center; gap: 15px;
+            viền trái: 8px solid var(--btn-orange);
+            flex-wrap: bọc;
         }
 
         .progress-container { width: 100%; margin-top: 10px; display: flex; align-items: center; gap: 10px; }
@@ -51,7 +52,7 @@
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #28a745, #85ffbd); transition: width 0.4s ease; }
         #progress-text { font-weight: 900; color: var(--caee-blue); min-width: 50px; text-align: right; }
 
-        /* Custom Modal */
+        /* Cửa sổ bật lên tùy chỉnh */
         #confirm-modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6); z-index: 15000; justify-content: center; align-items: center;
@@ -59,7 +60,7 @@
         .confirm-modal-content { width: 90%; max-width: 400px; padding: 30px; text-align: center; }
 
         .ai-avatar {
-            position: relative; width: 65px; height: 65px; 
+            vị trí: tương đối; chiều rộng: 65px; chiều cao: 65px;
             border-radius: 50%; border: 2px solid #ddd; overflow: hidden; flex-shrink: 0;
         }
         .ai-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -72,7 +73,7 @@
         @keyframes wave-anim { 0%, 100% { height: 5px; } 50% { height: 15px; } }
 
         .timer-floating {
-            position: fixed; top: 10px; right: 10px;
+            vị trí: cố định; trên: 10px; phải: 10px;
             background: #ff3333; color: white; padding: 10px 20px; border-radius: 50px;
             font-weight: 900; font-size: 1.3rem; border: 2px solid white;
             z-index: 2000; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
@@ -81,17 +82,8 @@
         #start-screen { min-height: 90vh; display: flex; justify-content: center; align-items: center; }
         .welcome-container { width: 95%; max-width: 450px; padding: 30px; }
         
-       form-control {
-    background: rgba(255, 255, 255, 0.2) !important; /* Ô nhập liệu trong suốt */
-    color: white !important; /* Đổi chữ thành trắng cho nổi trên nền tối */
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-}
-
-/* Đổi màu chữ gợi ý (placeholder) cho dễ đọc */
-.form-control::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-        .btn-start { background: var(--caee-blue); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: transform 0.2s; }
+        .form-control { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-weight: 500; }
+        .btn-start { background: var(--success); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: transform 0.2s; }
         
         #quiz-screen { padding: 15px; display: none; grid-template-columns: 1fr 320px; gap: 20px; max-width: 1300px; margin: auto; }
         #quiz-content { padding: 25px; min-height: 400px; }
@@ -103,129 +95,128 @@
 
         #warning-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(220, 53, 69, 0.95); color: white; z-index: 10000; 
+            background: rgba(220, 53, 69, 0.95); color: white; z-index: 10000;
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
         }
 
-     /* GIAO DIỆN KẾT QUẢ - ĐÃ ĐƯỢC ĐỒNG BỘ GLASSMORPHISM */
-        #result-screen { 
-            display: none; 
-            position: fixed; 
-            top:0; left:0; 
-            width:100%; height:100%; 
-            background: rgba(0, 0, 0, 0.2); /* Làm tối nền một chút để bảng kết quả nổi bật */
-            z-index: 9999; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 20px; 
+     /* GIAO DIỆN KẾT QUẢ - ĐÃ ĐƯỢC ĐỒNG BỘ THỦY TINH */
+        #màn hình kết quả {
+            hiển thị: không có;
+            Vị trí: cố định;
+            trên:0; trái:0;
+            chiều rộng: 100%; chiều cao: 100%;
+            nền: rgba(0, 0, 0, 0,7); /* Làm tối nền một chút để bật kết quả nổi bật */
+            Chỉ số z: 9999;
+            căn chỉnh nội dung: ở giữa;
+            căn chỉnh các mục: ở giữa;
+            khoảng đệm: 20px;
         }
 
-        .result-card { 
-            /* Đồng bộ thông số background và blur với khung câu hỏi */
-            background: rgba(255, 255, 255, 0.2) !important; 
-          /* Hiệu ứng làm mờ hậu cảnh phía sau khung */
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(10px);
+        .result-card {
+            /* Đồng bộ số nền và làm mờ với câu hỏi khung */
+            background: rgba(255, 255, 255, 0.7) !important;
+            bộ lọc nền: làm mờ (20px);
+            -webkit-backdrop-filter: blur(20px);
             
-            width: 100%; 
-            max-width: 450px; 
-            border-radius: 25px; 
-            padding: 30px; 
-            text-align: center; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); 
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            animation: slideUp 0.5s ease-out; /* Thêm hiệu ứng hiện ra cho đẹp */
+            chiều rộng: 100%;
+            chiều rộng tối đa: 450px;
+            bán kính viền: 25px;
+            khoảng đệm: 35px;
+            căn chỉnh văn bản: ở giữa;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            viền: 1px solid rgba(255, 255, 255, 0.4);
+            hoạt hình: slideUp 0,5 giây dễ dàng; /* Thêm hiệu ứng ra cho đẹp */
         }
 
         @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            từ { transform: translateY(30px); opacity: 0; }
+            đến { transform: translateY(0); opacity: 1; }
         }
 
         .result-card h2 { color: var(--caee-blue); margin-bottom: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
         
      /* VÒNG TRÒN ĐIỂM PHONG CÁCH KỸ THUẬT SỐ ĐIỆN TỬ */
-        .score-circle { 
-            width: 160px; height: 160px; /* Tăng kích thước để rõ nét hơn */
-            border-radius: 50%; 
-            /* Viền ngoài mờ ảo */
-            border: 4px solid rgba(255, 255, 255, 0.1); 
-            margin: 20px auto; 
+        .score-circle {
+            chiều rộng: 160px; chiều cao: 160px; /* Tăng kích thước để xác định rõ hơn */
+            bán kính viền: 50%;
+            /* Bảo ngoài mờ ảo */
+            viền: 4px solid rgba(255, 255, 255, 0.1);
+            lề: 20px tự động;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0, 0, 0, 0.2); /* Nền hơi tối để nổi bật hiệu ứng phát sáng */
-            position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.2), 0 0 15px rgba(255,255,255,0.1);
-            transition: all 0.4s ease;
+            nền: rgba(0, 0, 0, 0,2); /* Nền hơi tối đa để kích hoạt hiệu ứng phát sáng nổi bật */
+            vị trí: tương đối;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px rgba(255,255,255,0.1);
+            chuyển đổi: tất cả đều có độ mượt 0,4 giây;
         }
 
-        /* Tạo thêm một vòng sáng chạy quanh (Digital Ring) */
+        /* Tạo thêm một vòng sáng chạy xung quanh (Vòng kỹ thuật số) */
         .score-circle::before {
-            content: '';
-            position: absolute;
-            top: -5px; left: -5px; right: -5px; bottom: -5px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            /* Màu mặc định, sẽ bị ghi đè bởi class JS */
-            border-top-color: var(--caee-blue); 
-            border-right-color: #007bff;
-            animation: rotateRing 2s linear infinite;
+            nội dung: '';
+            vị trí: tuyệt đối;
+            trên: -5px; trái: -5px; phải: -5px; dưới: -5px;
+            bán kính viền: 50%;
+            viền: 2px đặc trong suốt;
+            /* Mặc định màu, sẽ bị ghi đè bởi lớp JS */
+            border-top-color: #007bff;
+            viền bên phải màu: #007bff;
+            hoạt ảnh: xoay vòng 2 giây tuyến tính vô hạn;
         }
 
         @keyframes rotateRing {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            từ { transform: rotate(0deg); }
+            thành { biến đổi: xoay(360 độ); }
         }
 
-        /* Chỉnh con số bên trong */
-        #res-score { 
-            font-size: 1.5rem; /* Số to rõ ràng */
-            font-weight: 900; 
-            line-height: 1;
-            margin-bottom: -5px;
+        /* Chỉnh sửa bên trong */
+        #res-score {
+            cỡ chữ: 1,5rem; /* Số cần xóa */
+            font-weight: 900;
+            chiều cao dòng: 1;
+            lề dưới: -5px;
         }
 
-        .score-circle small { 
-            font-size: 1rem; 
-            font-weight: 700; 
+        .score-circle small {
+            cỡ chữ: 1rem;
+            font-weight: 700;
             text-transform: uppercase;
-            opacity: 0.9;
+            Độ mờ: 0,9;
         }
 
-        /* Class bổ trợ cho JavaScript để đổi màu rực rỡ */
-        .score-digital-pass { 
-            color: #d32f2f !important; /* Xanh lá kỹ thuật số */
+        /* Class plugin hỗ trợ JavaScript để đổi màu rực rỡ */
+        .score-digital-pass {
+            màu sắc: #2ecc71 !quan trọng; /* Xanh lá kỹ thuật số */
             text-shadow: 0 0 15px rgba(46, 204, 113, 0.8);
         }
         .score-digital-pass::before { border-top-color: #2ecc71; border-right-color: #2ecc71; }
 
-        .score-digital-fail { 
-            color: #e74c3c !important; /* Đỏ rực cảnh báo */
+        .score-digital-fail {
+            màu: #e74c3c !quan trọng; /* Cảnh báo đỏ rực */
             text-shadow: 0 0 15px rgba(231, 76, 60, 0.8);
         }
         .score-digital-fail::before { border-top-color: #e74c3c; border-right-color: #e74c3c; }
-        /* Tinh chỉnh Badge điểm số cho rực rỡ hơn */
-        .status-badge { 
-            display: inline-block; 
-            padding: 10px 40px; 
-            border-radius: 50px; 
-            color: white; 
-            font-weight: 800; 
-            margin-bottom: 25px; 
-            font-size: 1.2rem; 
+        /* Tinh chỉnh Huy hiệu điểm số cho rực rỡ hơn */
+        .status-badge {
+            hiển thị: khối nội tuyến;
+            khoảng đệm: 10px 40px;
+            độ cong viền: 50px;
+            Màu sắc: trắng;
+            font-weight: 800;
+            lề dưới: 25px;
+            cỡ chữ: 1.2rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
         
-        .disclaimer-box { 
-            background: rgba(255, 255, 255, 0.4); 
-            color: #d32f2f; 
-            padding: 18px; 
-            border-radius: 15px; 
-            font-weight: 800; 
-            font-size: 0.9rem; 
-            line-height: 1.6; 
-            border: 1px dashed #d32f2f; 
-            margin: 20px 0; 
+        .disclaimer-box {
+            background: rgba(255, 255, 255, 0.4);
+            màu: #d32f2f;
+            khoảng cách lề: 18px;
+            độ cong viền: 15px;
+            font-weight: 800;
+            cỡ chữ: 0.9rem;
+            chiều cao dòng: 1.6;
+            viền: nét đứt 1px #d32f2f;
+            lề: 20px 0;
         }
 
         @media (max-width: 900px) { #quiz-screen { grid-template-columns: 1fr; } .timer-floating { font-size: 1.1rem; } }
@@ -241,8 +232,8 @@
 
     <div id="confirm-modal-overlay">
         <div class="confirm-modal-content">
-            <h3 style="color: var(--caee-blue); margin-bottom: 15px;">XÁC NHẬN NỘP BÀI</h3>
-            <p style="font-weight: 600; color: #333; margin-bottom: 25px;">Bạn có chắc chắn muốn kết thúc bài thi và nộp bài ngay bây giờ?</p>
+            <h3 style="color: var(--caee-blue); Margin-bottom: 15px;">XÁC NHẬN NỘP BÀI</h3>
+            <p style="font-weight: 600; color: #333; Margin-bottom: 25px;">Bạn có chắc chắn muốn kết thúc bài thi và tặng bài ngay bây giờ không?</p>
             <div style="display: flex; gap: 15px;">
                 <button class="btn-start" style="background: #666;" onclick="closeConfirmModal()">HỦY</button>
                 <button class="btn-start" style="background: var(--caee-blue);" onclick="finalizeSubmission()">ĐỒNG Ý</button>
@@ -255,16 +246,16 @@
     <div id="start-screen">
         <div class="welcome-container">
             <div style="text-align: center; margin-bottom: 20px;">
-                <div style="font-size: 16px; color: var(--caee-blue); font-weight: bold;">TRƯỜNG CĐ CƠ ĐIỆN NÔNG NGHIỆP VÀ MÔI TRƯỜNG</div>
+                <div style="font-size: 16px; color: var(--caee-blue); font-weight: đậm;">TRƯỜNG CĐ CƠ ĐIỆN NÔNG NGHIỆP VÀ MÔI TRƯỜNG</div>
                 <div style="font-size: 18px; color: #d32f2f; font-weight: 900; margin-top: 5px; text-transform: uppercase;">KHOA MÁY THI CÔNG</div>
             </div>
-            <label style="font-weight: bold; font-size: 0.9rem;">NGHỀ ĐÀO TẠO:</label>
+            <label style="font-weight: đậm; cỡ chữ: 0.9rem;">NGHỀ ĐÀO TẠO:</label>
             <select id="jobType" class="form-control" style="background: #fff8e1; border: 2px solid orange;" onchange="preloadQuestions()">
                 <option value="1538604642">VẬN HÀNH XE NÂNG HÀNG</option>
                 <option value="798209567">VẬN HÀNH CẦN TRỤC</option>
-                <option value="1969781180">VẬN HÀNH CẦU TRỤC</option>
+                <option value="1969781180">VẬN HÀNH CẦU TRỤ</option>
             </select>
-            <input type="text" id="studentName" placeholder="HỌ VÀ TÊN HỌC VIÊN" class="form-control" style="text-transform: uppercase;">
+            <input type="text" id="studentName" placeholder="HỌC VÀ TÊN HỌC VIÊN" class="form-control" style="text-transform: chữ hoa;">
             <input type="text" id="studentDOB" placeholder="Ngày sinh: (VD: 12/4/2000)" class="form-control">
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                 <input type="text" id="khoaThi" value="Tháng 6/2026" class="form-control" style="flex: 1.5; background: #eee; font-weight: bold;" readonly>
@@ -287,7 +278,7 @@
         </div>
         <div style="flex-grow: 1;">
             <div style="color: var(--caee-blue); font-weight: 800; font-size: 16px;">HỆ THỐNG TRỢ LÝ ẢO CAEE</div>
-            <div style="color: #333; font-size: 14px; font-weight: 600;">Học viên: <span id="display-name" style="color: #d32f2f;">---</span></div>
+            <div style="color: #333; font-size: 14px; font-weight: 600;"> Học viên: <span id="display-name" style="color: #d32f2f;">---</span></div>
         </div>
         <div class="progress-container">
             <div class="progress-bar-bg"><div id="progress-fill"></div></div>
@@ -301,7 +292,7 @@
             <div>
                 <h4 style="margin-bottom:15px; text-align:center; color: var(--caee-blue);">SƠ ĐỒ CÂU HỎI</h4>
                 <div id="nav-grid" style="display:grid; grid-template-columns: repeat(5, 1fr); gap:8px;"></div>
-                <button id="submitBtn" class="btn-start" style="margin-top:16px; background-color: var(--caee-blue);" onclick="openConfirmModal()">NỘP BÀI THI</button>
+                <button id="submitBtn" class="btn-start" style="margin-top:20px; background-color: var(--caee-blue);" onclick="openConfirmModal()">NỘP BÀI THI</button>
             </div>
         </div>
     </div>
@@ -309,8 +300,8 @@
     <div id="result-screen">
         <div class="result-card">
             <h2>KẾT QUẢ THI</h2>
-            <div style="margin-bottom: 20px; line-height: 1.6; font-size: 1rem; text-align: center; color:var(--caee-blue);">
-                Học viên: <b id="res-name" style="text-transform: uppercase;">---</b><br>
+            <div style="margin-bottom: 20px; line-height: 1.6; font-size: 1rem; text-align: center; color: #333;">
+                Học viên: <b id="res-name" style="text-transform: Uppercase;">---</b><br>
                 Ngày sinh: <b id="res-dob">---</b><br>
                 Khóa thi: <b id="res-id">---</b>
             </div>
@@ -334,10 +325,10 @@
     let currentQuestionIndex = 0, timeLeft = 1200, timerInterval, isSubmitted = false, cheatCount = 0;
     const synth = window.speechSynthesis;
 
-    function aiSpeakQuestion(qObj) {
+    hàm aiSpeakQuestion(qObj) {
         if (!document.getElementById('modeToggle').checked) return;
         synth.cancel();
-        const utter = new SpeechSynthesisUtterance(`Câu hỏi số ${currentQuestionIndex + 1}. ${qObj.question}.`);
+        const utter = new SpeechSynthesisUtterance(` Câu hỏi số ${currentQuestionIndex + 1}. ${qObj.question}.`);
         utter.lang = 'vi-VN';
         utter.onstart = () => { document.getElementById('ai-waves').style.display = 'flex'; };
         utter.onend = () => { document.getElementById('ai-waves').style.display = 'none'; };
@@ -345,18 +336,8 @@
     }
 
     window.onload = preloadQuestions;
-// Hàm AI phát âm thanh nhắc nhở
-function playWarningAI(count) {
-    const msg = new SpeechSynthesisUtterance();
-    msg.lang = 'vi-VN';
-    if (count < 3) {
-        msg.text = `Cảnh báo lần ${count}! Học viên không được thoát tab. Vi phạm quá 3 lần hệ thống sẽ tự động nộp bài!`;
-    } else {
-        msg.text = "Bạn đã vi phạm 3 lần. Hệ thống đang tự động nộp bài thi của bạn!";
-    }
-    window.speechSynthesis.speak(msg);
-}
-    function preloadQuestions() {
+
+    hàm preloadQuestions() {
         const jobSelect = document.getElementById('jobType');
         const gid = jobSelect.value;
         const body = document.body;
@@ -367,33 +348,33 @@ function playWarningAI(count) {
         else if (selectedText.includes("CẦU TRỤC")) body.classList.add('bg-cau-truc');
 
         Papa.parse(BASE_CSV_URL + gid, {
-            download: true, header: true, skipEmptyLines: true,
-            complete: function(results) {
+            Tải xuống: true, tiêu đề: true, bỏ qua các dòng trống: true,
+            hoàn thành: hàm(kết quả) {
                 allQuestions = results.data.filter(i => i.CauHoi).map(i => ({
-                    question: i.CauHoi, options: [i.A, i.B, i.C, i.D].filter(o => o),
-                    answer: i.DapAnDung ? i.DapAnDung.trim().toUpperCase() : "",
-                    explanation: i.Giaithich || "Tuân thủ quy trình an toàn.",
-                    image: i["HINH ANH"] || "" 
+                    câu hỏi: i.CauHoi, tùy chọn: [iA, iB, iC, iD].filter(o => o),
+                    trả lời: i.DapAnDung ? i.DapAnDung.trim().toUpperCase() : "",
+                    lời giải: i.Giaithich || "Tuân thủ quy trình an toàn.",
+                    hình ảnh: i["HINH ANH"] || ""
                 }));
             }
         });
     }
 
-    async function validateAndStart() {
+    hàm bất đồng bộ validateAndStart() {
         const maThi = document.getElementById('maThi').value.trim();
-        const name = document.getElementById('studentName').value.trim();
-        if(!name || !maThi) return alert("Nhập đủ thông tin!");
+        const name = document.getElementById('tudentName').value.trim();
+        if(!name || !maThi) return notification("Nhập đủ thông tin!");
         const btn = document.getElementById('btnStart');
-        btn.disabled = true; btn.innerText = "XÁC THỰC...";
-        try {
+        btn.disabled = true; btn.innerText = "XÁC THỰC TẾ...";
+        thử {
             const res = await fetch(`${WEB_APP_URL}?action=checkCode&code=${encodeURIComponent(maThi)}`);
             const result = await res.json();
-            if(result.isValid) startQuiz(); else { alert("Mã thi sai!"); btn.disabled = false; btn.innerText = "VÀO THI NGAY ➔"; }
-        } catch(e) { alert("Lỗi kết nối!"); btn.disabled = false; }
+            if(result.isValid) startQuiz(); else { Alert("Mã thi sai!"); btn.disabled = sai; btn.innerText = "VÀO THI NGAY ➔"; }
+        } Catch(e) { notification("Lỗi kết nối!"); btn.disabled = sai; }
     }
 
-    function startQuiz() {
-        document.getElementById('display-name').innerText = document.getElementById('studentName').value.toUpperCase();
+    hàm startQuiz() {
+        document.getElementById('display-name').innerText = document.getElementById('tudentName').value.toUpperCase();
         selectedQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 30);
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('ai-container').style.display = 'flex';
@@ -403,12 +384,12 @@ function playWarningAI(count) {
         startTimer();
     }
 
-    function showQuestion(idx) {
+    hàm showQuestion(idx) {
         currentQuestionIndex = idx;
         const q = selectedQuestions[idx];
         const stored = studentAnswers.find(a => a.qIndex === idx);
         const labels = ['A', 'B', 'C', 'D'];
-        let html = `<h3 style="color:var(--caee-blue); margin-bottom:15px;">Câu ${idx + 1}: ${q.question}</h3>`;
+        let html = `<h3 style="color:var(--caee-blue); margin-bottom:15px;"> Câu ${idx + 1}: ${q.question}</h3>`;
         if(q.image) html += `<div style="text-align:center"><img src="${q.image}" style="max-width:100%; border-radius:12px; margin-bottom:15px; border:1px solid #ddd;"></div>`;
         q.options.forEach((opt, i) => {
             let cls = stored && opt === stored.selected ? "selected" : "";
@@ -416,7 +397,7 @@ function playWarningAI(count) {
         });
         html += `<div style="display:flex; justify-content:space-between; margin-top:20px; gap:15px;">
                     <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx-1})" ${idx===0?'disabled':''}>Lùi lại</button>
-                    <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx+1})" ${idx===29?'disabled':''}>Tiếp theo</button>
+                    <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx+1})" ${idx===29?'disabled':''}> Tiếp theo</button>
                  </div>`;
         document.getElementById('quiz-content').innerHTML = html;
         renderGrid();
@@ -424,7 +405,7 @@ function playWarningAI(count) {
         aiSpeakQuestion(q);
     }
 
-    function selectAns(qIdx, ans) {
+    hàm selectAns(qIdx, ans) {
         if(isSubmitted) return;
         const findIndex = studentAnswers.findIndex(a => a.qIndex === qIdx);
         if(findIndex > -1) studentAnswers[findIndex].selected = ans;
@@ -432,13 +413,13 @@ function playWarningAI(count) {
         showQuestion(qIdx);
     }
 
-    function updateProgressBar() {
+    hàm cập nhật thanh tiến trình() {
         const completed = studentAnswers.length;
         document.getElementById('progress-fill').style.width = (completed / 30 * 100) + "%";
         document.getElementById('progress-text').innerText = completed + "/30";
     }
 
-    function renderGrid() {
+    hàm renderGrid() {
         const grid = document.getElementById('nav-grid'); grid.innerHTML = "";
         selectedQuestions.forEach((_, i) => {
             const hasAns = studentAnswers.some(a => a.qIndex === i);
@@ -448,9 +429,9 @@ function playWarningAI(count) {
         });
     }
 
-    function startTimer() {
+    hàm startTimer() {
         timerInterval = setInterval(() => {
-            timeLeft--;
+            Thời gian còn lại--;
             let m = Math.floor(timeLeft/60), s = timeLeft%60;
             document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
             if(timeLeft <= 0) finalizeSubmission();
@@ -460,11 +441,11 @@ function playWarningAI(count) {
     function openConfirmModal() { if (isSubmitted) return; document.getElementById('confirm-modal-overlay').style.display = 'flex'; }
     function closeConfirmModal() { document.getElementById('confirm-modal-overlay').style.display = 'none'; }
 
-    async function finalizeSubmission() {
-        if (isSubmitted) return;
+    hàm bất đồng bộ finalizeSubmission() {
+        nếu (isSubmitted) trả về;
         isSubmitted = true;
         closeConfirmModal();
-        clearInterval(timerInterval); 
+        clearInterval(timerInterval);
         synth.cancel();
         
         document.getElementById('submitBtn').disabled = true;
@@ -476,84 +457,42 @@ function playWarningAI(count) {
             if(ans && ['A','B','C','D'][q.options.indexOf(ans.selected)] === q.answer) score++;
         });
 
-  // 1. Tính toán điểm số hệ 10 và trạng thái
-        const score10 = parseFloat(((score / 30) * 10).toFixed(1));
-        const status = score10 >= 5.0 ? "ĐẠT" : "KHÔNG ĐẠT";
+        const score10 = ((score / 30) * 10).toFixed(1);
+        trạng thái const = điểm >= 25? “ĐẠT” : “KHÔNG ĐẠT”;
 
-        // 2. Cập nhật thông tin học viên lên bảng kết quả
-        document.getElementById('res-name').innerText = document.getElementById('studentName').value;
-        document.getElementById('res-dob').innerText = document.getElementById('studentDOB').value || "Chưa nhập";
+        // Cập nhật giao diện
+        document.getElementById('res-name').innerText = document.getElementById('tudentName').value;
+        document.getElementById('res-dob').innerText = document.getElementById('tudentDOB').value || "Chưa nhập";
         document.getElementById('res-id').innerText = document.getElementById('khoaThi').value;
         document.getElementById('res-score').innerText = score;
-
-        // 3. Kích hoạt phong cách kỹ thuật số (Đổi màu vòng tròn và badge)
-        const scoreCircle = document.querySelector('.score-circle');
+        document.getElementById('res-badge').innerText = score10 + " ĐIỂM";
+        
         const badge = document.getElementById('res-badge');
         const disc = document.getElementById('res-disclaimer');
-
-        if (score10 >= 5.0) {
-            scoreCircle.className = 'score-circle score-digital-pass';
-            badge.style.backgroundColor = "#28a745";
-            disc.classList.add('pass');
-        } else {
-            scoreCircle.className = 'score-circle score-digital-fail';
-            badge.style.backgroundColor = "#dc3545";
-            disc.classList.remove('pass');
-        }
-
-        badge.innerText = score10 + " ĐIỂM";
-
-        // 4. Hiển thị màn hình kết quả
+        badge.style.backgroundColor = status === "ĐẠT" ? "#28a745" : "#dc3545";
+        if(status === "ĐẠT") disc.classList.add('pass');
+        
         document.getElementById('result-screen').style.display = 'flex';
 
         // Gửi dữ liệu Google Sheets
-        const formData = new URLSearchParams();
+        const formData = URLSearchParams mới();
         formData.append('maThi', document.getElementById('maThi').value.trim());
-        formData.append('name', document.getElementById('studentName').value.toUpperCase());
-        formData.append('birthDate', document.getElementById('studentDOB').value);
+        formData.append('name', document.getElementById('tudentName').value.toUpperCase());
+        formData.append('birthDate', document.getElementById('tudentDOB').value);
         formData.append('score', score10);
         formData.append('status', status);
 
-        try { await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: formData }); } catch (e) {}
+        thử { await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: formData }); } catch (e) {}
 
-        let c = 15;
-        const cd = setInterval(() => { 
+        đặt c = 15;
+        const cd = setInterval(() => {
             if(c > 0) { c--; document.getElementById('countdown').innerText = c; }
-            else { clearInterval(cd); location.reload(); }
+            Ngược lại, { clearInterval(cd); location.reload(); }
         }, 1000);
     }
 
-   // Hệ thống giám sát thoát Tab thông minh
-document.addEventListener("visibilitychange", function() {
-    const quizScreen = document.getElementById('quiz-screen');
-    
-    // Chỉ xử lý khi đang trong màn hình làm bài và chưa nộp bài
-    if (document.visibilityState === 'hidden' && quizScreen.style.display === 'grid' && !isSubmitted) {
-        cheatCount++;
-        
-        // Hiển thị khung cảnh báo đỏ của thầy
-        document.getElementById('warning-overlay').style.display = 'flex';
-        document.getElementById('cheat-count-msg').innerText = `Vi phạm lần: ${cheatCount}/3`;
-        
-        // Phát giọng nói AI
-        playWarningAI(cheatCount);
-
-        // Nếu vi phạm đủ 3 lần
-        if (cheatCount >= 3) {
-            setTimeout(() => {
-                alert("BẠN ĐÃ VI PHẠM QUÁ 3 LẦN. HỆ THỐNG TỰ ĐỘNG NỘP BÀI!");
-                finalizeSubmission();
-            }, 1000);
-        }
-    }
-});
-
-// Tự động tắt cảnh báo khi quay lại (nếu chưa bị nộp bài)
-window.onfocus = () => { 
-    if (cheatCount < 3) {
-        document.getElementById('warning-overlay').style.display = 'none'; 
-    }
-};
+    window.onblur = () => { if(!isSubmitted && selectedQuestions.length > 0) { cheatCount++; document.getElementById('warning-overlay').style.display = 'flex'; document.getElementById('cheat-count-msg').innerText = `Vi phạm: ${cheatCount}/3`; if (cheatCount >= 3) finalizeSubmission(); } };
+    window.onfocus = () => { document.getElementById('warning-overlay').style.display = 'none'; };
 </script>
 </body>
 </html>
