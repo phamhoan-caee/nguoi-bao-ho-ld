@@ -394,25 +394,36 @@ function playWarningAI(count) {
         startTimer();
     }
 
-    function showQuestion(idx) {
+       function showQuestion(idx) {
         currentQuestionIndex = idx;
         const q = selectedQuestions[idx];
         const stored = studentAnswers.find(a => a.qIndex === idx);
+        const isPractice = document.getElementById('modeToggle').checked;
         const labels = ['A', 'B', 'C', 'D'];
-        let html = `<h3 style="color:var(--caee-blue); margin-bottom:15px;">Câu ${idx + 1}: ${q.question}</h3>`;
+
+        let html = `<h3 style="color:var(--caee-blue); margin-bottom:15px; font-size:1.3rem;">Câu ${idx + 1}: ${q.question}</h3>`;
         if(q.image) html += `<div style="text-align:center"><img src="${q.image}" style="max-width:100%; border-radius:12px; margin-bottom:15px; border:1px solid #ddd;"></div>`;
+
         q.options.forEach((opt, i) => {
-            let cls = stored && opt === stored.selected ? "selected" : "";
+            let cls = "";
+            const isSelected = stored && opt === stored.selected;
+            if(isPractice && stored) {
+                if(labels[i] === q.answer) cls = "correct";
+                else if(isSelected) cls = "wrong";
+            } else if(isSelected) cls = "selected";
             html += `<div class="option-item ${cls}" onclick="selectAns(${idx}, '${opt.replace(/'/g, "\\'")}')"><b>${labels[i]}.</b> ${opt}</div>`;
         });
+
+        if(isPractice && stored) html += `<div style="background:#fff9c4; padding:15px; border-radius:10px; margin-top:15px; border-left:5px solid #fbc02d;"><b>💡 Giải thích:</b> ${q.explanation}</div>`;
+        
         html += `<div style="display:flex; justify-content:space-between; margin-top:20px; gap:15px;">
-                    <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx-1})" ${idx===0?'disabled':''}>Lùi lại</button>
-                    <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx+1})" ${idx===29?'disabled':''}>Tiếp theo</button>
+                    <button class="btn-start" style="padding:12px; background:var(--btn-blue);" onclick="showQuestion(${idx-1})" ${idx===0?'disabled':''}>Lùi lại</button>
+                    <button class="btn-start" style="padding:12px; background:var(--btn-blue);" onclick="showQuestion(${idx+1})" ${idx===29?'disabled':''}>Tiếp theo</button>
                  </div>`;
+        
         document.getElementById('quiz-content').innerHTML = html;
         renderGrid();
-        updateProgressBar();
-        aiSpeakQuestion(q);
+        if (!stored && isPractice) aiSpeak(q.question);
     }
 
     function selectAns(qIdx, ans) {
@@ -420,21 +431,24 @@ function playWarningAI(count) {
         const findIndex = studentAnswers.findIndex(a => a.qIndex === qIdx);
         if(findIndex > -1) studentAnswers[findIndex].selected = ans;
         else studentAnswers.push({qIndex: qIdx, selected: ans});
+        
+        if (document.getElementById('modeToggle').checked) {
+            const labels = ['A', 'B', 'C', 'D'];
+            const q = selectedQuestions[qIdx];
+            const userChoiceLabel = labels[q.options.indexOf(ans)];
+            if (userChoiceLabel === q.answer) aiSpeak("Câu trả lời chính xác.");
+            else aiSpeak("Chưa đúng. Đáp án đúng là " + q.answer);
+        }
         showQuestion(qIdx);
     }
 
-    function updateProgressBar() {
-        const completed = studentAnswers.length;
-        document.getElementById('progress-fill').style.width = (completed / 30 * 100) + "%";
-        document.getElementById('progress-text').innerText = completed + "/30";
-    }
-
     function renderGrid() {
-        const grid = document.getElementById('nav-grid'); grid.innerHTML = "";
+        const grid = document.getElementById('nav-grid');
+        grid.innerHTML = "";
         selectedQuestions.forEach((_, i) => {
             const hasAns = studentAnswers.some(a => a.qIndex === i);
             const active = i === currentQuestionIndex ? 'border:3px solid var(--btn-orange);' : '';
-            const bg = hasAns ? 'background:var(--caee-blue); color:white;' : 'background:rgba(0,0,0,0.05);';
+            const bg = hasAns ? 'background:var(--caee-blue); color:white;' : 'background:#f0f0f0;';
             grid.innerHTML += `<div onclick="showQuestion(${i})" style="height:40px; display:flex; justify-content:center; align-items:center; border-radius:8px; cursor:pointer; font-weight:bold; ${bg} ${active}">${i+1}</div>`;
         });
     }
@@ -444,12 +458,10 @@ function playWarningAI(count) {
             timeLeft--;
             let m = Math.floor(timeLeft/60), s = timeLeft%60;
             document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
-            if(timeLeft <= 0) finalizeSubmission();
+            if(timeLeft <= 0) submitQuiz(true);
         }, 1000);
     }
 
-    function openConfirmModal() { if (isSubmitted) return; document.getElementById('confirm-modal-overlay').style.display = 'flex'; }
-    function closeConfirmModal() { document.getElementById('confirm-modal-overlay').style.display = 'none'; }
 
     async function finalizeSubmission() {
         if (isSubmitted) return;
