@@ -7,13 +7,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         :root {
-            --caee-blue: #003399; --header-blue: #0040cc;
-            --btn-orange: #ff6600; --btn-blue: #3366ff;
-            --success: #28a745; --danger: #dc3545;
+           --caee-blue: #003399; 
+            --header-blue: #0040cc;
+            --btn-orange: #ff6600; 
+            --btn-blue: #3366ff;
+            --success: #28a745; 
+            --danger: #dc3545;
+            --glass-bg: rgba(255, 255, 255, 0.25); 
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --ai-glow: 0 0 15px rgba(255, 235, 59, 0.5);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
         
-        body { 
+     body { 
             background-color: #000;
             background-size: cover;
             background-position: center;
@@ -22,8 +28,8 @@
             font-family: 'Segoe UI', Arial, sans-serif; 
             overflow-x: hidden;
             transition: background-image 0.5s ease-in-out;
+            min-height: 100vh;
         }
-
         /* Hình nền raw */
         .bg-xe-nang { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-xe-nang.jpg'); }
         .bg-can-truc { background-image: url('https://raw.githubusercontent.com/phamhoan-caee/trac-nghiem-8.5.26/main/bg-can-truc.jpg'); }
@@ -31,7 +37,7 @@
 
       /* Glassmorphism - Tối ưu độ trong suốt để nhìn rõ ảnh nền */
         .welcome-container, #quiz-content, .sidebar-right > div, #ai-container, .confirm-modal-content {
-            background: rgba(255, 255, 255, 0.3) !important; /* Độ trong suốt 0.55 giúp nhìn xuyên thấu tốt hơn */
+            background: rgba(255, 255, 255, 0.55) !important; /* Độ trong suốt 0.55 giúp nhìn xuyên thấu tốt hơn */
             backdrop-filter: blur(18px); /* Tăng độ nhòe nền kính để chữ không bị rối */
             -webkit-backdrop-filter: blur(18px);
             border-radius: 15px; 
@@ -58,9 +64,9 @@
         }
         .confirm-modal-content { width: 90%; max-width: 400px; padding: 30px; text-align: center; }
 
-        .ai-avatar {
-            position: relative; width: 65px; height: 65px; 
-            border-radius: 50%; border: 2px solid #ddd; overflow: hidden; flex-shrink: 0;
+         .ai-avatar {
+            position: relative; width: 60px; height: 60px; 
+            border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); overflow: hidden; flex-shrink: 0;
         }
         .ai-avatar img { width: 100%; height: 100%; object-fit: cover; }
         
@@ -256,16 +262,16 @@
                 <option value="1969781180">VẬN HÀNH CẦU TRỤC</option>
             </select>
             <input type="text" id="studentName" placeholder="HỌ VÀ TÊN HỌC VIÊN" class="form-control" style="text-transform: uppercase;">
-            <input type="text" id="studentDOB" placeholder="NGÀY SINH: (VD: 12/4/2000)" class="form-control">
+            <input type="text" id="studentDOB" placeholder="Ngày sinh: (VD: 12/4/2000)" class="form-control">
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <input type="text" id="KHÓA THI" value="Tháng 6/2026" class="form-control" style="flex: 1.5; background: #eee; font-weight: bold;" readonly>
-                <input type="password" id="MÃ THI" placeholder="MÃ THI" class="form-control" style="flex: 1;">
+                <input type="text" id="khoaThi" value="Tháng 6/2026" class="form-control" style="flex: 1.5; background: #eee; font-weight: bold;" readonly>
+                <input type="password" id="maThi" placeholder="Mã thi" class="form-control" style="flex: 1;">
             </div>
             <div style="display:flex; align-items:center; margin: 15px 0; justify-content: center; gap:10px; background: rgba(227, 242, 253, 0.8); padding: 10px; border-radius: 10px;">
                 <input type="checkbox" id="modeToggle" style="width:20px; height:20px; cursor: pointer;">
-                <label for="modeToggle" style="cursor:pointer; font-weight: 700; color: #0d47a1;">Chế độ ôn tập</label>
+                <label for="modeToggle" style="cursor:pointer; font-weight: 700; color: #0d47a1;">Chế độ ÔN TẬP (Có AI đọc câu hỏi)</label>
             </div>
-            <button class="btn-start" id="btnStart" onclick="validateAndStart()">BẮT ĐẦU THI ➔</button>
+            <button class="btn-start" id="btnStart" onclick="validateAndStart()">VÀO THI NGAY ➔</button>
         </div>
     </div>
 
@@ -277,21 +283,24 @@
             </div>
         </div>
         <div style="flex-grow: 1;">
-            <div style="color: var(--caee-blue); font-weight: 800; font-size: 16px;">HỆ THỐNG THI TRẮC NGHIỆM CAEE</div>
-            <div style="color: #333; font-size: 14px; font-weight: 600;">Học viên: <span id="display-name" style="color: #d32f2f;">---</span></div>
+            <div style="color: var(--caee-blue); font-weight: 800; font-size: 16px;">TRỢ LÝ ẢO CAEE</div>
+            <div style="color: #fff; font-size: 14px;">Học viên: <span id="display-name" style="font-weight: bold; color: #00ff00;">---</span></div>
         </div>
-        <div class="progress-container">
+       <div class="progress-container">
             <div class="progress-bar-bg"><div id="progress-fill"></div></div>
             <div id="progress-text">0/30</div>
         </div>
     </div>
 
     <div id="quiz-screen">
-        <div id="quiz-content"></div>
+        <div id="quiz-area">
+            <div id="quiz-content"></div>
+            <div id="ai-explanation-box"></div>
+        </div>
         <div class="sidebar-right">
             <div>
-                <h4 style="margin-bottom:15px; text-align:center; color: var(--caee-blue);">SƠ ĐỒ CÂU HỎI</h4>
-                <div id="nav-grid" style="display:grid; grid-template-columns: repeat(5, 1fr); gap:8px;"></div>
+                <h4 style="margin-bottom:15px; text-align:center; color: #ffeb3b;">SƠ ĐỒ CÂU HỎI</h4>
+                <div id="nav-grid" class="nav-btn-grid"></div>
                 <button id="submitBtn" class="btn-start" style="margin-top:16px; background-color: var(--caee-blue);" onclick="openConfirmModal()">NỘP BÀI THI</button>
             </div>
         </div>
@@ -301,9 +310,9 @@
         <div class="result-card">
             <h2>KẾT QUẢ THI</h2>
             <div style="margin-bottom: 20px; line-height: 1.6; font-size: 1rem; text-align: center; color:var(--caee-blue);">
-                HỌC VIÊN: <b id="res-name" style="text-transform: uppercase;">---</b><br>
-                NGÀY SINH: <b id="res-dob">---</b><br>
-                KHÓA THI: <b id="res-id">---</b>
+                Học viên: <b id="res-name" style="text-transform: uppercase;">---</b><br>
+                Ngày sinh: <b id="res-dob">---</b><br>
+                Khóa thi: <b id="res-id">---</b>
             </div>
             <div class="score-circle">
                 <span id="res-score">0</span>
@@ -341,7 +350,7 @@ function playWarningAI(count) {
     const msg = new SpeechSynthesisUtterance();
     msg.lang = 'vi-VN';
     if (count < 3) {
-        msg.text = `Cảnh báo lần ${count}! Học viên không được thoát bài thi. Vi phạm quá 3 lần hệ thống sẽ tự động nộp bài!`;
+        msg.text = `Cảnh báo lần ${count}! Học viên không được thoát tab. Vi phạm quá 3 lần hệ thống sẽ tự động nộp bài!`;
     } else {
         msg.text = "Bạn đã vi phạm 3 lần. Hệ thống đang tự động nộp bài thi của bạn!";
     }
