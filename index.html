@@ -32,13 +32,13 @@
 
       /* Glassmorphism - Tối ưu độ trong suốt để nhìn rõ ảnh nền */
         .welcome-container, #quiz-content, .sidebar-right > div, #ai-container, .confirm-modal-content {
-            background: rgba(221, 221, 221, 0.5) !important; /* Độ trong suốt 0.55 giúp nhìn xuyên thấu tốt hơn */
-            backdrop-filter: blur(18px); /* Tăng độ nhòe nền kính để chữ không bị rối */
-            -webkit-backdrop-filter: blur(18px);
+           background: rgba(255, 255, 255, 0.85) !important; /* Độ trong suốt 0.55 giúp nhìn xuyên thấu tốt hơn */
+            backdrop-filter: blur(20px); /* Tăng độ nhòe nền kính để chữ không bị rối */
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
-            border: 1px solid rgba(255, 255, 255, 0.4); /* Viền sáng nhẹ tạo hiệu ứng nổi khối */
-        }
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Đổ bóng nhẹ để khung nổi lên */
+}
 
         #ai-container {
             display: none; max-width: 1300px; margin: 5px auto; 
@@ -50,7 +50,7 @@
         .progress-container { width: 100%; margin-top: 10px; display: flex; align-items: center; gap: 10px; }
         .progress-bar-bg { flex-grow: 1; height: 8px; background: #ddd; border-radius: 10px; overflow: hidden; }
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #28a745, #85ffbd); transition: width 0.4s ease; }
-        #progress-text { font-weight: 900; color: var(--caee-blue); min-width: 50px; text-align: right; }
+        #progress-text { font-weight: 800; color: var(--caee-blue); min-width: 50px; text-align: right; }
 
         /* Custom Modal */
         #confirm-modal-overlay {
@@ -88,8 +88,14 @@
         #quiz-screen { padding: 15px; display: none; grid-template-columns: 1fr 320px; gap: 20px; max-width: 1300px; margin: auto; }
         #quiz-content { padding: 25px; min-height: 400px; }
         
-        .option-item { border: 2px solid #eee; border-radius: 8px; padding: 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; font-weight: 600; color: #333; }
-        .option-item.selected { border-color: var(--btn-blue); background: #eef2ff; }
+        .option-item { background: #ffffff !important; 
+    border: 1px solid #e2e8f0 !important;
+    color: #2d3748 !important;
+}
+        .option-item.selected {background: #e6fffa !important; /* Màu xanh nhạt khi chọn */
+    border-color: #38b2ac !important;
+    color: #234e52 !important;
+}
         .option-item.correct { background: #d4edda !important; border-color: #28a745 !important; }
         .option-item.wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
 
