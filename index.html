@@ -895,18 +895,37 @@ function playWarningAI(count) {
         }, 1000);
     }
 
-    document.addEventListener("visibilitychange", function() {
-        if (document.visibilityState === 'hidden' && document.getElementById('quiz-screen').style.display === 'grid' && !isSubmitted) {
-            cheatCount++;
-            document.getElementById('warning-overlay').style.display = 'flex';
-            document.getElementById('cheat-count-msg').innerText = `Vi phạm lần: ${cheatCount}/3`;
-            const msg = new SpeechSynthesisUtterance(cheatCount < 3 ? `Cảnh báo vi phạm lần ${cheatCount}` : "Bạn đã vi phạm 3 lần, hệ thống tự động nộp bài");
-            msg.lang = 'vi-VN'; synth.speak(msg);
-            if (cheatCount >= 3) finalizeSubmission();
-        }
-    });
+   // Hệ thống giám sát thoát Tab thông minh
+document.addEventListener("visibilitychange", function() {
+    const quizScreen = document.getElementById('quiz-screen');
+    
+    // Chỉ xử lý khi đang trong màn hình làm bài và chưa nộp bài
+    if (document.visibilityState === 'hidden' && quizScreen.style.display === 'grid' && !isSubmitted) {
+        cheatCount++;
+        
+        // Hiển thị khung cảnh báo đỏ của thầy
+        document.getElementById('warning-overlay').style.display = 'flex';
+        document.getElementById('cheat-count-msg').innerText = `Vi phạm lần: ${cheatCount}/3`;
+        
+        // Phát giọng nói AI
+        playWarningAI(cheatCount);
 
-    window.onfocus = () => { if (cheatCount < 3) document.getElementById('warning-overlay').style.display = 'none'; };
+        // Nếu vi phạm đủ 3 lần
+        if (cheatCount >= 3) {
+            setTimeout(() => {
+                alert("Bạn đã vi phạm quá nhiều lần. Hệ thống đang tiến hành nộp bài tự động.");
+                finalizeSubmission();
+            }, 1000);
+        }
+    }
+});
+
+// Tự động tắt cảnh báo khi quay lại (nếu chưa bị nộp bài)
+window.onfocus = () => { 
+    if (cheatCount < 3) {
+        document.getElementById('warning-overlay').style.display = 'none'; 
+    }
+};
 </script>
 </body>
 </html>
