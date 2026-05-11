@@ -121,7 +121,7 @@
             <input type="text" id="studentName" placeholder="HỌ VÀ TÊN HỌC VIÊN" class="form-control" style="text-transform: uppercase;">
             <input type="text" id="studentDOB" placeholder="Ngày/tháng/năm sinh (VD: 01/01/2000)" class="form-control">
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <input type="text" id="khoaThi" value="Tháng 8/2026" class="form-control" style="flex: 1.5; background: #eee; font-weight: bold;" readonly>
+                <input type="text" id="khoaThi" value="Tháng 6/2026" class="form-control" style="flex: 1.5; background: #eee; font-weight: bold;" readonly>
                 <input type="password" id="maThi" placeholder="Mã thi" class="form-control" style="flex: 1;">
             </div>
             <div style="display:flex; align-items:center; margin: 15px 0; justify-content: center; gap:10px; background: #e3f2fd; padding: 10px; border-radius: 10px;">
@@ -178,8 +178,8 @@
     </div>
 
 <script>
-    const BASE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX7gLNKe58sjBUDPDQOohDehuVD22EFgCe472mKd61a6d_FPIYFoh21DEdi9_BS7yukbuwy69Q9oZZ/pub?output=csv&gid=";
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwG-oFBhn_GiGypEp6k2nzX7JMjG0t8Jil2C1cDJjTVoD_GGWVzbzFybh88WcsxlL1o/exec";
+    const BASE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTgusT-lc4tl11z_8YIgP1Vdt0R_mm95CMCEU91Ep_gskkQMTWpJTzJ44yKFl1QS5YHDL8ZO8JyGTjr/pub?output=csv&gid=";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzVoK4epfyj0A-QVwsRQ1aW6UbKLflvXUAl1FvoGEk2vxOnuGqUzpmdLraT8ICqOjz6GQ/exec";
     
     let allQuestions = [], selectedQuestions = [], studentAnswers = [];
     let currentQuestionIndex = 0, timeLeft = 1200, timerInterval, isSubmitted = false, cheatCount = 0;
