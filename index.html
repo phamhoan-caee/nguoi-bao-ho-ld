@@ -225,7 +225,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
-     
+        
         .disclaimer-box { 
             background: rgba(255, 255, 255, 0.4); 
             color: #d32f2f; 
@@ -337,7 +337,7 @@
     </div>
 <script>
 const BASE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTgusT-lc4tl11z_8YIgP1Vdt0R_mm95CMCEU91Ep_gskkQMTWpJTzJ44yKFl1QS5YHDL8ZO8JyGTjr/pub?output=csv&gid=";
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzNB87uVoOCb7Ajmq3_Pgl6kkeX5wvJp4HUrca9ywt-goWxEDD8szbNcO551uYS7kGbmQ/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyFpuuH7ym2NPhO-LOVUO5dB4bdCK-o_iAMpTZdVWSITnQxx9ob_rURvdCV-iO4Q6VuPg/exec";
 
 let allQuestions = [], selectedQuestions = [], studentAnswers = [];
 let currentQuestionIndex = 0, timeLeft = 1200, timerInterval, isSubmitted = false, cheatCount = 0;
@@ -574,8 +574,7 @@ async function finalizeSubmission() {
     formData.append('birthDate', document.getElementById('studentDOB').value);
     formData.append('score', score10);
     formData.append('status', status);
-    formData.append('viPham', cheatCount);
-    formData.append('ngheName', sNghe);
+
     try { await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: formData }); } catch (e) {}
 
     let c = 15;
