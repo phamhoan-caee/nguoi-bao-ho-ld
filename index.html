@@ -337,57 +337,72 @@
     </div>
 
 <script>
-   const BASE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTgusT-lc4tl11z_8YIgP1Vdt0R_mm95CMCEU91Ep_gskkQMTWpJTzJ44yKFl1QS5YHDL8ZO8JyGTjr/pub?output=csv&gid=";
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_En2EbVXfbVqf8hE3MFLLcrYUIgc_50jJo_WzPpm6ZB1s19fSbEAJgYLGlPG5E_9ekw/exec";
+ const BASE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4BCGb7JrlQzmhy1-0Bl-qQEVU9OaBabk4xFOZtvMlIVkhDpH7tuMlfdkdZ94ytVfD6cyGT6VDmlP0/pub?output=csv&gid=";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwKkO5YWKpMXSrTKvIP3GHHbGxX8rtU_NaiZmQPU23H5gLAilzjk7lKFExllxfHyUVRwA/exec";
 
 let allQuestions = [], selectedQuestions = [], studentAnswers = [];
-let currentQuestionIndex = 0, timeLeft = 1200, timerInterval, isSubmitted = false;
+let currentQuestionIndex = 0, timeLeft = 1200, timerInterval, isSubmitted = false, cheatCount = 0;
 const synth = window.speechSynthesis;
 
-// --- 1. HÀM ĐỌC CÂU HỎI VÀ ĐÁP ÁN (TRÌNH TỰ) ---
+// 1. HÀM ĐỌC TRÌNH TỰ (CÂU HỎI -> NGHỈ -> ĐÁP ÁN)
 function aiSpeakQuestion(qObj) {
     if (!document.getElementById('modeToggle').checked) return;
-    synth.cancel();
+    synth.cancel(); // Dừng các yêu cầu đọc trước đó
 
-    // Đọc Câu hỏi
-    const utterQuestion = new SpeechSynthesisUtterance(`Câu hỏi số ${currentQuestionIndex + 1}: ${qObj.question}`);
-    utterQuestion.lang = 'vi-VN';
-    utterQuestion.rate = 0.85; // Tốc độ hơi chậm để học viên kịp nghe
-    utterQuestion.pitch = 1.1; // Độ cao tự nhiên
+    // Tạo nội dung đọc câu hỏi
+    const questionUtter = new SpeechSynthesisUtterance(`Câu hỏi số ${currentQuestionIndex + 1}. ${qObj.question}.`);
+    questionUtter.lang = 'vi-VN';
+    questionUtter.rate = 0.9; // Đọc chậm rãi câu hỏi
+    questionUtter.pitch = 1;
 
-    // Đọc các lựa chọn (sau khi câu hỏi kết thúc)
-    const labels = ['A', 'B', 'C', 'D'];
-    let optionsText = ". Các đáp án lựa chọn là: ";
-    qObj.options.forEach((opt, i) => {
-        optionsText += ` Đáp án ${labels[i]}: ${opt}. `;
-    });
+    questionUtter.onstart = () => { document.getElementById('ai-waves').style.display = 'flex'; };
     
-    const utterOptions = new SpeechSynthesisUtterance(optionsText);
-    utterOptions.lang = 'vi-VN';
-    utterOptions.rate = 0.95; 
-    utterOptions.pitch = 1.0;
+    questionUtter.onend = () => {
+        // Sau khi đọc xong câu hỏi, nghỉ 1 giây rồi đọc các lựa chọn
+        setTimeout(() => {
+            const labels = ['A', 'B', 'C', 'D'];
+            let optionsText = qObj.options.map((opt, i) => `Đáp án ${labels[i]}: ${opt}`).join('. ');
+            const optionsUtter = new SpeechSynthesisUtterance(optionsText);
+            optionsUtter.lang = 'vi-VN';
+            optionsUtter.rate = 1; // Đọc đáp án tốc độ bình thường
+            
+            optionsUtter.onend = () => { document.getElementById('ai-waves').style.display = 'none'; };
+            synth.speak(optionsUtter);
+        }, 1000);
+    };
 
-    utterQuestion.onstart = () => { document.getElementById('ai-waves').style.display = 'flex'; };
-    utterOptions.onend = () => { document.getElementById('ai-waves').style.display = 'none'; };
-
-    // Xếp hàng đọc: Câu hỏi xong đến Đáp án
-    synth.speak(utterQuestion);
-    synth.speak(utterOptions);
+    synth.speak(questionUtter);
 }
 
-// --- 2. HÀM ĐỌC GIẢI THÍCH KHI CHỌN XONG ---
-function aiSpeakExplanation(qObj) {
-    if (!document.getElementById('modeToggle').checked || !qObj.explanation) return;
-    
-    synth.cancel(); // Dừng đọc câu hỏi để đọc ngay giải thích
-    const msg = new SpeechSynthesisUtterance(`Giải thích đáp án đúng: ${qObj.explanation}`);
-    msg.lang = 'vi-VN';
-    msg.rate = 1.0;
-    msg.pitch = 1.0;
+// 2. HÀM ĐỌC GIẢI THÍCH (KHI CHỌN XONG)
+function showAIExplanation(qObj) {
+    const expBox = document.getElementById('explanation-box');
+    const isReviewMode = document.getElementById('modeToggle').checked;
 
-    document.getElementById('ai-waves').style.display = 'flex';
-    msg.onend = () => { document.getElementById('ai-waves').style.display = 'none'; };
-    synth.speak(msg);
+    if (isReviewMode && qObj.explanation) {
+        expBox.style.display = 'block';
+        expBox.innerHTML = `<b>🤖 TRỢ LÝ AI GIẢI THÍCH:</b> <br> ${qObj.explanation}`;
+        
+        // Tối ưu giọng đọc cho phần giải thích
+        const msg = new SpeechSynthesisUtterance(`Giải thích cho bạn như sau: ${qObj.explanation}`);
+        msg.lang = 'vi-VN';
+        msg.rate = 1.1;  // Tốc độ hơi nhanh một chút để tiết kiệm thời gian
+        msg.pitch = 1.1; // Độ cao hơi tăng để tạo sự thân thiện, hào hứng
+        
+        synth.cancel(); // Dừng việc đọc câu hỏi/đáp án để tập trung giải thích
+        synth.speak(msg);
+    }
+}
+
+// --- CÁC HÀM CƠ CHẾ HỆ THỐNG GIỮ NGUYÊN ---
+
+window.onload = preloadQuestions;
+
+function playWarningAI(count) {
+    const msg = new SpeechSynthesisUtterance();
+    msg.lang = 'vi-VN';
+    msg.text = count < 3 ? `Cảnh báo lần ${count}! Học viên không được thoát bài thi.` : "Bạn đã vi phạm 3 lần. Hệ thống tự động nộp bài!";
+    window.speechSynthesis.speak(msg);
 }
 
 function preloadQuestions() {
@@ -406,7 +421,7 @@ function preloadQuestions() {
             allQuestions = results.data.filter(i => i.CauHoi).map(i => ({
                 question: i.CauHoi, options: [i.A, i.B, i.C, i.D].filter(o => o),
                 answer: i.DapAnDung ? i.DapAnDung.trim().toUpperCase() : "",
-                explanation: i.Giaithich || "Tuân thủ đúng quy trình kỹ thuật an toàn.",
+                explanation: i.Giaithich || "Hãy chọn đáp án đúng theo quy định an toàn.",
                 image: i["HINH ANH"] || "" 
             }));
         }
@@ -416,14 +431,13 @@ function preloadQuestions() {
 async function validateAndStart() {
     const maThi = document.getElementById('maThi').value.trim();
     const name = document.getElementById('studentName').value.trim();
-    if(!name || !maThi) return alert("Vui lòng nhập đủ thông tin!");
+    if(!name || !maThi) return alert("Vui lòng nhập đầy đủ họ tên và mã thi!");
     const btn = document.getElementById('btnStart');
     btn.disabled = true; btn.innerText = "ĐANG XÁC THỰC...";
     try {
         const res = await fetch(`${WEB_APP_URL}?action=checkCode&code=${encodeURIComponent(maThi)}`);
         const result = await res.json();
-        if(result.isValid) startQuiz(); 
-        else { alert("Mã thi không chính xác!"); btn.disabled = false; btn.innerText = "VÀO THI NGAY ➔"; }
+        if(result.isValid) startQuiz(); else { alert("Mã thi không chính xác!"); btn.disabled = false; btn.innerText = "VÀO THI NGAY ➔"; }
     } catch(e) { alert("Lỗi kết nối máy chủ!"); btn.disabled = false; }
 }
 
@@ -451,26 +465,24 @@ function showQuestion(idx) {
     q.options.forEach((opt, i) => {
         let cls = "";
         if (stored && opt === stored.selected) {
-            cls = isReviewMode ? (labels[i] === q.answer ? "correct" : "wrong selected") : "selected";
+            cls = isReviewMode ? ((labels[i] === q.answer) ? "correct" : "wrong selected") : "selected";
         } else if (isReviewMode && stored && labels[i] === q.answer) {
             cls = "correct";
         }
         html += `<div class="option-item ${cls}" onclick="selectAns(${idx}, '${opt.replace(/'/g, "\\'")}')"><b>${labels[i]}.</b> ${opt}</div>`;
     });
 
-    html += `<div id="explanation-box" style="${isReviewMode && stored ? 'display:block' : 'display:none'}">
-                <b>🤖 TRỢ LÝ AI GIẢI THÍCH:</b> <br> ${q.explanation}
-             </div>`;
-
+    html += `<div id="explanation-box"></div>`;
     html += `<div style="display:flex; justify-content:space-between; margin-top:20px; gap:15px;">
                 <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx-1})" ${idx===0?'disabled':''}>Lùi lại</button>
                 <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx+1})" ${idx===29?'disabled':''}>Tiếp theo</button>
              </div>`;
     
     document.getElementById('quiz-content').innerHTML = html;
+    if (isReviewMode && stored) showAIExplanation(q);
     renderGrid();
     updateProgressBar();
-    if (!stored) aiSpeakQuestion(q); // Chỉ tự động đọc nếu chưa trả lời
+    aiSpeakQuestion(q);
 }
 
 function selectAns(qIdx, ans) {
@@ -478,9 +490,7 @@ function selectAns(qIdx, ans) {
     const findIndex = studentAnswers.findIndex(a => a.qIndex === qIdx);
     if(findIndex > -1) studentAnswers[findIndex].selected = ans;
     else studentAnswers.push({qIndex: qIdx, selected: ans});
-    
     showQuestion(qIdx);
-    aiSpeakExplanation(selectedQuestions[qIdx]); // Đọc giải thích ngay khi chọn
 }
 
 function updateProgressBar() {
@@ -521,19 +531,19 @@ async function finalizeSubmission() {
     document.getElementById('submitBtn').disabled = true;
     document.getElementById('submitBtn').innerText = "ĐANG LƯU...";
 
-    let scoreCount = 0;
+    let correctCount = 0;
     selectedQuestions.forEach((q, i) => {
         const ans = studentAnswers.find(a => a.qIndex === i);
-        if(ans && ['A','B','C','D'][q.options.indexOf(ans.selected)] === q.answer) scoreCount++;
+        if(ans && ['A','B','C','D'][q.options.indexOf(ans.selected)] === q.answer) correctCount++;
     });
 
-    const score10 = parseFloat(((scoreCount / 30) * 10).toFixed(1));
-    const status = score10 >= 8.3 ? "ĐẠT" : "KHÔNG ĐẠT"; // Theo mốc 25/30 câu bạn đã yêu cầu trước đó
+    const score10 = parseFloat(((correctCount / 30) * 10).toFixed(1));
+    const status = score10 >= 8.3 ? "ĐẠT" : "KHÔNG ĐẠT"; // 25/30 câu là ~8.3 điểm
 
     document.getElementById('res-name').innerText = document.getElementById('studentName').value;
     document.getElementById('res-dob').innerText = document.getElementById('studentDOB').value || "Chưa nhập";
     document.getElementById('res-id').innerText = document.getElementById('khoaThi').value;
-    document.getElementById('res-score').innerText = scoreCount;
+    document.getElementById('res-score').innerText = correctCount;
 
     const scoreCircle = document.querySelector('.score-circle');
     const badge = document.getElementById('res-badge');
@@ -549,7 +559,6 @@ async function finalizeSubmission() {
     badge.innerText = score10 + " ĐIỂM";
     document.getElementById('result-screen').style.display = 'flex';
 
-    // Gửi dữ liệu
     const formData = new URLSearchParams();
     formData.append('maThi', document.getElementById('maThi').value.trim());
     formData.append('name', document.getElementById('studentName').value.toUpperCase());
@@ -559,12 +568,27 @@ async function finalizeSubmission() {
 
     try { await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: formData }); } catch (e) {}
 
-    let count = 15;
+    let c = 15;
     const cd = setInterval(() => { 
-        if(count > 0) { count--; document.getElementById('countdown').innerText = count; }
+        if(c > 0) { c--; document.getElementById('countdown').innerText = c; }
         else { clearInterval(cd); location.reload(); }
     }, 1000);
 }
+
+document.addEventListener("visibilitychange", function() {
+    const quizScreen = document.getElementById('quiz-screen');
+    if (document.visibilityState === 'hidden' && quizScreen.style.display === 'grid' && !isSubmitted) {
+        cheatCount++;
+        document.getElementById('warning-overlay').style.display = 'flex';
+        document.getElementById('cheat-count-msg').innerText = `Vi phạm lần: ${cheatCount}/3`;
+        playWarningAI(cheatCount);
+        if (cheatCount >= 3) {
+            setTimeout(() => { finalizeSubmission(); }, 1000);
+        }
+    }
+});
+
+window.onfocus = () => { if (cheatCount < 3) document.getElementById('warning-overlay').style.display = 'none'; };
 </script>
 </body>
 </html>
