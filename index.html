@@ -277,7 +277,7 @@
             <input type="text" id="studentName" placeholder="HỌ VÀ TÊN HỌC VIÊN" class="form-control" style="text-transform: uppercase;">
             <input type="text" id="studentDOB" placeholder="Ngày sinh: (VD: 12/4/2000)" class="form-control">
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <input type="text" id="khoaThi" value="Tháng 6/2026" class="form-control" style="flex: 1.5; background: #eee; font-weight: bold;" readonly>
+                <input type="text" id="khoaThi" value="Tháng 8/2026" class="form-control" style="flex: 1.5; background: #eee; font-weight: bold;" readonly>
                 <input type="password" id="maThi" placeholder="Mã thi" class="form-control" style="flex: 1;">
             </div>
             <div style="display:flex; align-items:center; margin: 15px 0; justify-content: center; gap:10px; background: rgba(227, 242, 253, 0.8); padding: 10px; border-radius: 10px;">
@@ -584,55 +584,26 @@ async function finalizeSubmission() {
     }, 1000);
 }
 
-// Hệ thống cảnh báo và chống gian lận
+// Chống gian lận - AI luôn đọc cảnh báo dù ở chế độ nào
 document.addEventListener("visibilitychange", function() {
     const quizScreen = document.getElementById('quiz-screen');
-    const isOnTap = document.getElementById('modeToggle').checked; // Kiểm tra chế độ
-
-    // Chỉ thực hiện khi đang ở màn hình làm bài và chưa nộp bài
     if (document.visibilityState === 'hidden' && quizScreen.style.display === 'grid' && !isSubmitted) {
-        
-        synth.cancel(); // Ngắt các lời đọc câu hỏi/giải thích đang phát
+        cheatCount++;
         document.getElementById('warning-overlay').style.display = 'flex';
+        document.getElementById('cheat-count-msg').innerText = `Vi phạm lần: ${cheatCount}/3`;
         
-        let msgText = "";
-
-        if (isOnTap) {
-            // LOGIC CHẾ ĐỘ ÔN TẬP
-            document.getElementById('cheat-count-msg').innerText = "BẠN ĐANG RỜI KHỎI MÀN HÌNH ÔN TẬP!";
-            msgText = "Bạn vừa rời khỏi màn hình. Hãy quay lại để tiếp tục ôn luyện.";
-        } else {
-            // LOGIC CHẾ ĐỘ THI CHÍNH THỨC
-            cheatCount++;
-            document.getElementById('cheat-count-msg').innerText = `Vi phạm lần: ${cheatCount}/3`;
-            
-            if (cheatCount < 3) {
-                msgText = `Cảnh báo vi phạm lần ${cheatCount}. Bạn không được thoát màn hình khi đang thi!`;
-            } else {
-                msgText = "Bạn đã vi phạm quá 3 lần. Hệ thống tự động kết thúc bài thi ngay bây giờ.";
-                // Đợi AI đọc xong thông báo rồi mới nộp bài
-                setTimeout(() => {
-                    finalizeSubmission();
-                }, 3000);
-            }
-        }
-
-        // AI thực hiện đọc thông báo cảnh báo
+        // AI thực hiện đọc cảnh báo ngay lập tức
+        synth.cancel();
+        const msgText = cheatCount < 3 ? `Cảnh báo lần ${cheatCount}! Vui lòng không thoát màn hình.` : "Bạn đã vi phạm quá 3 lần, hệ thống tự động nộp bài.";
         const msg = new SpeechSynthesisUtterance(msgText);
         msg.lang = 'vi-VN';
-        msg.rate = 1.0;
         synth.speak(msg);
+        
+        if (cheatCount >= 3) finalizeSubmission();
     }
 });
 
-// Xử lý khi học viên quay lại màn hình
-window.onfocus = () => { 
-    const isOnTap = document.getElementById('modeToggle').checked;
-    // Tự động tắt bảng cảnh báo nếu ở chế độ ôn tập hoặc chưa bị nộp bài do quá số lần thi
-    if (isOnTap || cheatCount < 3) {
-        document.getElementById('warning-overlay').style.display = 'none'; 
-    }
-};
+window.onfocus = () => { if (cheatCount < 3) document.getElementById('warning-overlay').style.display = 'none'; };
 </script>
 </body>
 </html>
