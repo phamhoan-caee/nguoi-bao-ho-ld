@@ -135,7 +135,25 @@
         }
 
         .result-card h2 { color: var(--caee-blue); margin-bottom: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        
+       /* Khung giải thích AI */
+#explanation-box {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    border-left: 5px solid var(--success);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #333;
+    animation: fadeIn 0.5s ease;
+}
+
+#explanation-box b { color: var(--caee-blue); }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+} 
      /* VÒNG TRÒN ĐIỂM PHONG CÁCH KỸ THUẬT SỐ ĐIỆN TỬ */
         .score-circle { 
             width: 160px; height: 160px; /* Tăng kích thước để rõ nét hơn */
@@ -395,27 +413,71 @@ function playWarningAI(count) {
         startTimer();
     }
 
-    function showQuestion(idx) {
-        currentQuestionIndex = idx;
-        const q = selectedQuestions[idx];
-        const stored = studentAnswers.find(a => a.qIndex === idx);
-        const labels = ['A', 'B', 'C', 'D'];
-        let html = `<h3 style="color:var(--caee-blue); margin-bottom:15px;">Câu ${idx + 1}: ${q.question}</h3>`;
-        if(q.image) html += `<div style="text-align:center"><img src="${q.image}" style="max-width:100%; border-radius:12px; margin-bottom:15px; border:1px solid #ddd;"></div>`;
-        q.options.forEach((opt, i) => {
-            let cls = stored && opt === stored.selected ? "selected" : "";
-            html += `<div class="option-item ${cls}" onclick="selectAns(${idx}, '${opt.replace(/'/g, "\\'")}')"><b>${labels[i]}.</b> ${opt}</div>`;
-        });
-        html += `<div style="display:flex; justify-content:space-between; margin-top:20px; gap:15px;">
-                    <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx-1})" ${idx===0?'disabled':''}>Lùi lại</button>
-                    <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx+1})" ${idx===29?'disabled':''}>Tiếp theo</button>
-                 </div>`;
-        document.getElementById('quiz-content').innerHTML = html;
-        renderGrid();
-        updateProgressBar();
-        aiSpeakQuestion(q);
+   function showQuestion(idx) {
+    currentQuestionIndex = idx;
+    const q = selectedQuestions[idx];
+    const stored = studentAnswers.find(a => a.qIndex === idx);
+    const labels = ['A', 'B', 'C', 'D'];
+    const isReviewMode = document.getElementById('modeToggle').checked;
+
+    let html = `<h3 style="color:var(--caee-blue); margin-bottom:15px;">Câu ${idx + 1}: ${q.question}</h3>`;
+    if(q.image) html += `<div style="text-align:center"><img src="${q.image}" style="max-width:100%; border-radius:12px; margin-bottom:15px; border:1px solid #ddd;"></div>`;
+    
+    q.options.forEach((opt, i) => {
+        let cls = "";
+        // Nếu đã chọn đáp án
+        if (stored && opt === stored.selected) {
+            if (isReviewMode) {
+                // Trong chế độ ôn tập: Hiện đúng/sai ngay lập tức
+                cls = (labels[i] === q.answer) ? "correct" : "wrong selected";
+            } else {
+                cls = "selected";
+            }
+        } else if (isReviewMode && stored && labels[i] === q.answer) {
+            // Hiển thị đáp án đúng nếu học viên chọn sai
+            cls = "correct";
+        }
+
+        html += `<div class="option-item ${cls}" onclick="selectAns(${idx}, '${opt.replace(/'/g, "\\'")}')"><b>${labels[i]}.</b> ${opt}</div>`;
+    });
+
+    // Thêm khung giải thích AI
+    html += `<div id="explanation-box"></div>`;
+
+    html += `<div style="display:flex; justify-content:space-between; margin-top:20px; gap:15px;">
+                <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx-1})" ${idx===0?'disabled':''}>Lùi lại</button>
+                <button class="btn-start" style="background:var(--btn-blue); flex:1;" onclick="showQuestion(${idx+1})" ${idx===29?'disabled':''}>Tiếp theo</button>
+             </div>`;
+    
+    document.getElementById('quiz-content').innerHTML = html;
+    
+    // Nếu ở chế độ ôn tập và đã trả lời, hiển thị giải thích ngay
+    if (isReviewMode && stored) {
+        showAIExplanation(q);
     }
 
+    renderGrid();
+    updateProgressBar();
+    aiSpeakQuestion(q);
+}
+function showAIExplanation(qObj) {
+    const expBox = document.getElementById('explanation-box');
+    const isReviewMode = document.getElementById('modeToggle').checked;
+
+    if (isReviewMode && qObj.explanation) {
+        expBox.style.display = 'block';
+        expBox.innerHTML = `<b>🤖 TRỢ LÝ AI GIẢI THÍCH:</b> <br> ${qObj.explanation}`;
+        
+        // AI đọc giải thích sau khi đọc xong câu hỏi (tùy chọn)
+        const msg = new SpeechSynthesisUtterance(`Giải thích: ${qObj.explanation}`);
+        msg.lang = 'vi-VN';
+        msg.rate = 1.1; // Tốc độ nhanh hơn một chút cho phần giải thích
+        
+        // Hủy các câu đang đọc dở để đọc giải thích mới
+        // synth.cancel(); // Nếu muốn AI tập trung đọc giải thích ngay
+        synth.speak(msg);
+    }
+}
     function selectAns(qIdx, ans) {
         if(isSubmitted) return;
         const findIndex = studentAnswers.findIndex(a => a.qIndex === qIdx);
