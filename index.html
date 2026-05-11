@@ -345,33 +345,30 @@ let currentQuestionIndex = 0, timeLeft = 1200, timerInterval, isSubmitted = fals
 const synth = window.speechSynthesis;
 
 // 1. HÀM ĐỌC TRÌNH TỰ (CÂU HỎI -> NGHỈ -> ĐÁP ÁN)
-function aiSpeakQuestion(qObj) {
-    if (!document.getElementById('modeToggle').checked) return;
-    synth.cancel(); // Dừng các yêu cầu đọc trước đó
+function showAIExplanation(qObj) {
+    const expBox = document.getElementById('explanation-box');
+    const isReviewMode = document.getElementById('modeToggle').checked;
 
-    // Tạo nội dung đọc câu hỏi
-    const questionUtter = new SpeechSynthesisUtterance(`Câu hỏi số ${currentQuestionIndex + 1}. ${qObj.question}.`);
-    questionUtter.lang = 'vi-VN';
-    questionUtter.rate = 0.9; // Đọc chậm rãi câu hỏi
-    questionUtter.pitch = 1;
+    if (isReviewMode && qObj.explanation) {
+        // Hiển thị khung chữ trên màn hình
+        expBox.style.display = 'block';
+        expBox.innerHTML = `<b>🤖 TRỢ LÝ AI GIẢI THÍCH:</b> <br> ${qObj.explanation}`;
+        
+        // Dừng mọi nội dung đang đọc (câu hỏi hoặc đáp án dở dang)
+        synth.cancel(); 
 
-    questionUtter.onstart = () => { document.getElementById('ai-waves').style.display = 'flex'; };
-    
-    questionUtter.onend = () => {
-        // Sau khi đọc xong câu hỏi, nghỉ 1 giây rồi đọc các lựa chọn
-        setTimeout(() => {
-            const labels = ['A', 'B', 'C', 'D'];
-            let optionsText = qObj.options.map((opt, i) => `Đáp án ${labels[i]}: ${opt}`).join('. ');
-            const optionsUtter = new SpeechSynthesisUtterance(optionsText);
-            optionsUtter.lang = 'vi-VN';
-            optionsUtter.rate = 1; // Đọc đáp án tốc độ bình thường
-            
-            optionsUtter.onend = () => { document.getElementById('ai-waves').style.display = 'none'; };
-            synth.speak(optionsUtter);
-        }, 1000);
-    };
+        // Thiết lập giọng đọc giải thích chuyên nghiệp
+        const msg = new SpeechSynthesisUtterance(`Giải thích: ${qObj.explanation}`);
+        msg.lang = 'vi-VN';
+        msg.rate = 1.1;  // Tốc độ nhanh hơn (1.1)
+        msg.pitch = 1.0; // Độ cao tự nhiên
 
-    synth.speak(questionUtter);
+        // Hiệu ứng sóng âm khi AI đang nói giải thích
+        msg.onstart = () => { document.getElementById('ai-waves').style.display = 'flex'; };
+        msg.onend = () => { document.getElementById('ai-waves').style.display = 'none'; };
+        
+        synth.speak(msg);
+    }
 }
 
 // 2. HÀM ĐỌC GIẢI THÍCH (KHI CHỌN XONG)
@@ -487,10 +484,22 @@ function showQuestion(idx) {
 
 function selectAns(qIdx, ans) {
     if(isSubmitted) return;
+    
     const findIndex = studentAnswers.findIndex(a => a.qIndex === qIdx);
-    if(findIndex > -1) studentAnswers[findIndex].selected = ans;
-    else studentAnswers.push({qIndex: qIdx, selected: ans});
+    if(findIndex > -1) {
+        studentAnswers[findIndex].selected = ans;
+    } else {
+        studentAnswers.push({qIndex: qIdx, selected: ans});
+    }
+
+    // Cập nhật giao diện để hiện đúng/sai và khung giải thích
     showQuestion(qIdx);
+
+    // LẤY DỮ LIỆU CÂU HỎI HIỆN TẠI VÀ ĐỌC GIẢI THÍCH NGAY
+    const q = selectedQuestions[qIdx];
+    if (document.getElementById('modeToggle').checked) {
+        showAIExplanation(q);
+    }
 }
 
 function updateProgressBar() {
