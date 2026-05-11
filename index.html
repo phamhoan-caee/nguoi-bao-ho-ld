@@ -479,8 +479,8 @@ async function validateAndStart() {
     const btn = document.getElementById('btnStart');
     btn.disabled = true; btn.innerText = "ĐANG XÁC THỰC...";
     try {
-        const res = await fetch(`${WEB_APP_URL}?action=checkCode&code=${encodeURIComponent(maThi)}`);
-        const result = await res.json();
+        const url = `${WEB_APP_URL}?action=checkCode&code=${encodeURIComponent(maThi)}&name=${encodeURIComponent(name)}&ngheName=${encodeURIComponent(sNghe)}`;
+const res = await fetch(url);
         if(result.isValid) startQuiz(); 
         else { alert("Mã thi không chính xác!"); btn.disabled = false; btn.innerText = "VÀO THI NGAY ➔"; }
     } catch(e) { alert("Lỗi kết nối máy chủ!"); btn.disabled = false; }
@@ -568,12 +568,19 @@ async function finalizeSubmission() {
     document.getElementById('result-screen').style.display = 'flex';
 
     // Gửi dữ liệu về Google Sheets
-    const formData = new URLSearchParams();
-    formData.append('maThi', document.getElementById('maThi').value.trim());
-    formData.append('name', document.getElementById('studentName').value.toUpperCase());
-    formData.append('birthDate', document.getElementById('studentDOB').value);
-    formData.append('score', score10);
-    formData.append('status', status);
+  const jobSelect = document.getElementById('jobType');
+const sNghe = jobSelect.options[jobSelect.selectedIndex].text;
+const isOnTap = document.getElementById('modeToggle').checked;
+
+const formData = new URLSearchParams();
+formData.append('maThi', document.getElementById('maThi').value.trim());
+formData.append('name', document.getElementById('studentName').value.toUpperCase());
+formData.append('birthDate', document.getElementById('studentDOB').value);
+formData.append('khoaThi', document.getElementById('khoaThi').value); // Thêm dòng này
+formData.append('score', score10 + "/10"); 
+formData.append('status', status);
+formData.append('viPham', cheatCount); // Thêm dòng này
+formData.append('ngheName', isOnTap ? "ÔN TẬP " + sNghe : sNghe);
 
     try { await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: formData }); } catch (e) {}
 
