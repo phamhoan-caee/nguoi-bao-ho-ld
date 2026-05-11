@@ -353,19 +353,6 @@
         utter.onend = () => { document.getElementById('ai-waves').style.display = 'none'; };
         synth.speak(utter);
     }
-
-    window.onload = preloadQuestions;
-// Hàm AI phát âm thanh nhắc nhở
-function playWarningAI(count) {
-    const msg = new SpeechSynthesisUtterance();
-    msg.lang = 'vi-VN';
-    if (count < 3) {
-        msg.text = `Cảnh báo lần ${count}! Học viên không được thoát bài thi. Nếu vi phạm quá 3 lần hệ thống sẽ tự động nộp bài!`;
-    } else {
-        msg.text = "Bạn đã vi phạm 3 lần. Hệ thống đang tự động nộp bài thi của bạn!";
-    }
-    window.speechSynthesis.speak(msg);
-}
     function preloadQuestions() {
         const jobSelect = document.getElementById('jobType');
         const gid = jobSelect.value;
@@ -460,24 +447,7 @@ function playWarningAI(count) {
     updateProgressBar();
     aiSpeakQuestion(q);
 }
-function showAIExplanation(qObj) {
-    const expBox = document.getElementById('explanation-box');
-    const isReviewMode = document.getElementById('modeToggle').checked;
 
-    if (isReviewMode && qObj.explanation) {
-        expBox.style.display = 'block';
-        expBox.innerHTML = `<b>🤖 TRỢ LÝ AI GIẢI THÍCH:</b> <br> ${qObj.explanation}`;
-        
-        // AI đọc giải thích sau khi đọc xong câu hỏi (tùy chọn)
-        const msg = new SpeechSynthesisUtterance(`Giải thích: ${qObj.explanation}`);
-        msg.lang = 'vi-VN';
-        msg.rate = 1.1; // Tốc độ nhanh hơn một chút cho phần giải thích
-        
-        // Hủy các câu đang đọc dở để đọc giải thích mới
-        // synth.cancel(); // Nếu muốn AI tập trung đọc giải thích ngay
-        synth.speak(msg);
-    }
-}
     function selectAns(qIdx, ans) {
         if(isSubmitted) return;
         const findIndex = studentAnswers.findIndex(a => a.qIndex === qIdx);
@@ -529,7 +499,14 @@ function showAIExplanation(qObj) {
             const ans = studentAnswers.find(a => a.qIndex === i);
             if(ans && ['A','B','C','D'][q.options.indexOf(ans.selected)] === q.answer) score++;
         });
+function showAIExplanation(qObj) {
+    const expBox = document.getElementById('explanation-box');
+    const isReviewMode = document.getElementById('modeToggle').checked;
 
+    if (isReviewMode && qObj.explanation) {
+        expBox.style.display = 'block';
+        expBox.innerHTML = `<b>🤖 TRỢ LÝ AI GIẢI THÍCH:</b> <br> ${qObj.explanation}`;
+     
   // 1. Tính toán điểm số hệ 10 và trạng thái
         const score10 = parseFloat(((score / 30) * 10).toFixed(1));
         const status = score10 >= 5.0 ? "ĐẠT" : "KHÔNG ĐẠT";
@@ -576,38 +553,81 @@ function showAIExplanation(qObj) {
             else { clearInterval(cd); location.reload(); }
         }, 1000);
     }
+   
+     // --- CẤU HÌNH AI ĐỌC NỘI DUNG ---
 
-   // Hệ thống giám sát thoát Tab thông minh
-document.addEventListener("visibilitychange", function() {
-    const quizScreen = document.getElementById('quiz-screen');
+function aiSpeakQuestion(qObj) {
+    if (!document.getElementById('modeToggle').checked) return;
     
-    // Chỉ xử lý khi đang trong màn hình làm bài và chưa nộp bài
-    if (document.visibilityState === 'hidden' && quizScreen.style.display === 'grid' && !isSubmitted) {
-        cheatCount++;
-        
-        // Hiển thị khung cảnh báo đỏ của thầy
-        document.getElementById('warning-overlay').style.display = 'flex';
-        document.getElementById('cheat-count-msg').innerText = `Vi phạm lần: ${cheatCount}/3`;
-        
-        // Phát giọng nói AI
-        playWarningAI(cheatCount);
+    // Hủy các nội dung đang đọc dở
+    synth.cancel();
 
-        // Nếu vi phạm đủ 3 lần
-        if (cheatCount >= 3) {
-            setTimeout(() => {
-                alert("BẠN ĐÃ VI PHẠM QUÁ 3 LẦN. HỆ THỐNG TỰ ĐỘNG NỘP BÀI!");
-                finalizeSubmission();
-            }, 1000);
-        }
-    }
-});
+    // 1. Tạo nội dung đọc cho Câu hỏi
+    const questionText = `Câu hỏi số ${currentQuestionIndex + 1}: ${qObj.question}.`;
+    const utterQuestion = new SpeechSynthesisUtterance(questionText);
+    utterQuestion.lang = 'vi-VN';
+    utterQuestion.rate = 0.9; // Đọc chậm rãi câu hỏi
 
-// Tự động tắt cảnh báo khi quay lại (nếu chưa bị nộp bài)
-window.onfocus = () => { 
-    if (cheatCount < 3) {
-        document.getElementById('warning-overlay').style.display = 'none'; 
+    // 2. Tạo nội dung đọc cho các Đáp án
+    const labels = ['A', 'B', 'C', 'D'];
+    let optionsText = " Các đáp án gồm có: ";
+    qObj.options.forEach((opt, i) => {
+        optionsText += ` Đáp án ${labels[i]}: ${opt}. `;
+    });
+    const utterOptions = new SpeechSynthesisUtterance(optionsText);
+    utterOptions.lang = 'vi-VN';
+    utterOptions.rate = 1.0;
+
+    // Hiệu ứng sóng âm khi bắt đầu đọc
+    utterQuestion.onstart = () => { document.getElementById('ai-waves').style.display = 'flex'; };
+    
+    // Khi đọc xong hết chuỗi thì tắt sóng âm
+    utterOptions.onend = () => { document.getElementById('ai-waves').style.display = 'none'; };
+
+    // Thực hiện đọc theo trình tự
+    synth.speak(utterQuestion);
+    synth.speak(utterOptions);
+}
+
+function showAIExplanation(qObj) {
+    const expBox = document.getElementById('explanation-box');
+    const isReviewMode = document.getElementById('modeToggle').checked;
+
+    if (isReviewMode && qObj.explanation) {
+        expBox.style.display = 'block';
+        expBox.innerHTML = `<b>🤖 TRỢ LÝ AI GIẢI THÍCH:</b> <br> ${qObj.explanation}`;
+        
+        // AI đọc giải thích
+        const msg = new SpeechSynthesisUtterance(`Giải thích: ${qObj.explanation}`);
+        msg.lang = 'vi-VN';
+        msg.rate = 1.0;
+        
+        // Ưu tiên đọc giải thích ngay khi hiện khung
+        synth.cancel(); 
+        document.getElementById('ai-waves').style.display = 'flex';
+        msg.onend = () => { document.getElementById('ai-waves').style.display = 'none'; };
+        synth.speak(msg);
     }
-};
+}
+
+// Cập nhật lại hàm selectAns để kích hoạt đọc giải thích
+function selectAns(qIdx, ans) {
+    if(isSubmitted) return;
+    const findIndex = studentAnswers.findIndex(a => a.qIndex === qIdx);
+    
+    if(findIndex > -1) {
+        studentAnswers[findIndex].selected = ans;
+    } else {
+        studentAnswers.push({qIndex: qIdx, selected: ans});
+    }
+    
+    // Vẽ lại câu hỏi để hiện màu đúng/sai
+    showQuestion(qIdx);
+    
+    // Gọi AI giải thích nếu đang ở chế độ ôn tập
+    const q = selectedQuestions[qIdx];
+    showAIExplanation(q);
+}
 </script>
 </body>
 </html>
