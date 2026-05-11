@@ -148,7 +148,8 @@
         <h1 style="font-size: 80px;">⚠️</h1>
         <h2>CẢNH BÁO VI PHẠM!</h2>
         <div id="cheat-count-msg" style="margin-top: 15px; font-size: 1.5rem; font-weight: 800;"></div>
-    </div>
+    <p>Vui lòng quay lại màn hình làm bài ngay lập tức!</p>
+</div>
 
     <div id="confirm-modal-overlay">
         <div class="confirm-modal-content">
@@ -468,17 +469,46 @@ async function finalizeSubmission() {
 
 document.addEventListener("visibilitychange", function() {
     const quizScreen = document.getElementById('quiz-screen');
+    const isOnTap = document.getElementById('modeToggle').checked; // Kiểm tra chế độ
+
     if (document.visibilityState === 'hidden' && quizScreen.style.display === 'grid' && !isSubmitted) {
-        cheatCount++;
+        
+        // HIỆN CẢNH BÁO CHO CẢ 2 CHẾ ĐỘ
         document.getElementById('warning-overlay').style.display = 'flex';
-        document.getElementById('cheat-count-msg').innerText = `Vi phạm lần: ${cheatCount}/3`;
-        const msg = new SpeechSynthesisUtterance(cheatCount < 3 ? `Cảnh báo lần ${cheatCount}!` : "Vi phạm quá 3 lần, hệ thống tự động nộp bài.");
-        msg.lang = 'vi-VN'; synth.speak(msg);
-        if (cheatCount >= 3) finalizeSubmission();
+        synth.cancel(); // Dừng các âm thanh đọc câu hỏi đang phát
+
+        if (isOnTap) {
+            // CHẾ ĐỘ ÔN TẬP: Chỉ nhắc nhở, không tính điểm vi phạm
+            document.getElementById('cheat-count-msg').innerText = "BẠN ĐANG RỜI KHỎI MÀN HÌNH ÔN TẬP!";
+            const msg = new SpeechSynthesisUtterance("Bạn vừa rời khỏi màn hình. Hãy quay lại để tiếp tục ôn tập.");
+            msg.lang = 'vi-VN';
+            synth.speak(msg);
+        } else {
+            // CHẾ ĐỘ THI: Tính vi phạm nghiêm ngặt
+            cheatCount++;
+            document.getElementById('cheat-count-msg').innerText = `CẢNH BÁO VI PHẠM THI LẦN: ${cheatCount}/3`;
+            
+            const msg = new SpeechSynthesisUtterance(cheatCount < 3 ? 
+                `Cảnh báo vi phạm lần ${cheatCount}. Bạn không được thoát màn hình khi đang thi!` : 
+                "Đã vi phạm quá 3 lần. Hệ thống tự động kết thúc bài thi của bạn.");
+            msg.lang = 'vi-VN';
+            synth.speak(msg);
+
+            // Nếu quá 3 lần thì tự động nộp bài
+            if (cheatCount >= 3) {
+                setTimeout(() => {
+                    finalizeSubmission();
+                }, 2000); // Đợi 2 giây để nghe thông báo rồi mới nộp
+            }
+        }
     }
 });
-
-window.onfocus = () => { if (cheatCount < 3) document.getElementById('warning-overlay').style.display = 'none'; };
+    window.onfocus = function() {
+    // Nếu ở chế độ ôn tập hoặc chưa quá 3 lần vi phạm thì ẩn cảnh báo đi
+    if (document.getElementById('modeToggle').checked || cheatCount < 3) {
+        document.getElementById('warning-overlay').style.display = 'none';
+    }
+};
 </script>
 </body>
 </html>
